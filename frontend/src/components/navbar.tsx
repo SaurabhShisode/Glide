@@ -7,7 +7,7 @@ export default function Navbar() {
     const navigate = useNavigate();
 
     return (
-        <nav className="w-full fixed top-5 left-0 z-50 rounded-2xl">
+        <nav className="w-full   left-0 z-50 py-5 bg-[#070F2B]">
             <div className="grid grid-cols-12 mx-5 px-6 lg:px-6  items-center  gap-10 h-16">
                 <div className="col-span-3">
                     <h1 className="flex-start text-3xl font-comfortaa font-bold text-[#9290C3]">
