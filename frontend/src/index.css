@@ -26,6 +26,37 @@
 .font-michroma {
   font-family:"Michroma", sans-serif;
 }
+
+.Toastify__toast-container {
+  font-family: 'Poppins', sans-serif;
+}
+
+
+.Toastify__toast--success {
+  background: #1e1e2f !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+.Toastify__toast--error {
+  background: #1e1e2f !important;
+  color: #ffffff !important;
+  
+  border-radius: 12px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+
+.Toastify__close-button {
+  color: #9290C3 !important;
+}
+
+.Toastify__close-button:hover {
+  color: #ffffff !important;
+}
+
 @theme inline {
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);

@@ -2,21 +2,70 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import heroImage from "../assets/svgviewer-output.svg";
-
 import { motion, AnimatePresence } from "framer-motion";
 import { HighlightText } from '../components/animate-ui/text/highlight';
+import axios from "axios";
+import { FcGoogle } from "react-icons/fc";
+
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider } from "../firebase";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 export default function LandingPage() {
     const [filterStatus, setFilterStatus] = useState<'glidecampus' | 'glideaway'>('glidecampus');
     const [loginStatus, setLoginStatus] = useState<'yes' | 'no'>('no');
     const [showSplash, setShowSplash] = useState(true);
-
     const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+    const navigate = useNavigate();
+
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2000);
         return () => clearTimeout(timer);
     }, []);
+
+    const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+    localStorage.setItem("token", res.data.token);
+    toast.success("Login successful!");
+    navigate("/home");  
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || "Login failed");
+  }
+};
+
+const handleRegister = async (e: React.FormEvent) => {
+  e.preventDefault();
+  try {
+    const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
+    localStorage.setItem("token", res.data.token);
+    toast.success("Registration successful!");
+    navigate("/home");   
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || "Registration failed");
+  }
+};
+
+const handleGoogleLogin = async () => {
+  try {
+    const result = await signInWithPopup(auth, googleProvider);
+    const idToken = await result.user.getIdToken();
+
+    const res = await axios.post("http://localhost:5000/api/auth/google", { idToken });
+    localStorage.setItem("token", res.data.token);
+    toast.success("Google login successful!");
+    navigate("/home");   
+  } catch (err: any) {
+    toast.error(err.response?.data?.message || "Google login failed");
+  }
+};
 
     return (
         <>
@@ -51,6 +100,8 @@ export default function LandingPage() {
             <div className="w-full min-h-screen bg-[#070F2B]">
                 <div className="flex items-center justify-center px-6">
                     <section className="flex flex-col md:flex-row items-center max-w-6xl gap-40 mt-20">
+
+
                         <motion.div
                             className="relative -ml-40 md:-ml-60 lg:-ml-100"
                             initial={{ opacity: 0, y: 150 }}
@@ -64,7 +115,7 @@ export default function LandingPage() {
                             />
                         </motion.div>
 
-                        {/* Hero section vs Auth */}
+
                         {loginStatus === 'no' ? (
                             <motion.div
                                 className="flex-1 text-center md:text-left px-7"
@@ -107,14 +158,43 @@ export default function LandingPage() {
                                         <p className="mt-6 text-lg font-comfortaa text-gray-300">
                                             Enter your credentials to access your account.
                                         </p>
-                                        <form className="mt-8 flex flex-col gap-4">
-                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" />
-                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" />
-                                            <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
+                                        <form onSubmit={handleLogin} className="mt-8 flex flex-col gap-4">
+                                            <input
+                                                type="email"
+                                                placeholder="VIT Email"
+                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />
+                                            <input
+                                                type="password"
+                                                placeholder="Password"
+                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition"
+                                            >
                                                 Log In
                                             </button>
                                         </form>
-                                        <p className="mt-4 text-gray-400 text-sm">
+
+                                        <div className="w-full h-px bg-gray-300 my-6"></div>
+
+                                        <div className="mt-6 flex justify-center">
+                                            <button
+                                                type="button"
+                                                onClick={handleGoogleLogin}
+                                                className="flex items-center gap-3 cursor-pointer px-6 py-3 rounded-2xl bg-white text-gray-700 font-semibold shadow-md hover:bg-gray-100 transition "
+                                            >
+                                                <FcGoogle size={24} />
+                                                <span>Continue with Google</span>
+                                            </button>
+                                        </div>
+
+                                        <p className="mt-4 text-gray-400 text-sm text-center">
                                             Don’t have an account?{" "}
                                             <span
                                                 className="text-[#7c81f3] cursor-pointer hover:underline"
@@ -132,14 +212,15 @@ export default function LandingPage() {
                                         <p className="mt-6 text-lg font-comfortaa text-gray-300">
                                             Enter your credentials to create your account.
                                         </p>
-                                        <form className="mt-8 flex flex-col gap-4">
-                                            <input type="text" placeholder="Name" className="p-3 rounded-md bg-gray-800 text-white" />
-                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" />
-                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" />
-                                            <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
+                                        <form onSubmit={handleRegister} className="mt-8 flex flex-col gap-4">
+                                            <input type="text" placeholder="Name" className="p-3 rounded-md bg-gray-800 text-white" value={name} onChange={(e) => setName(e.target.value)} />
+                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" value={email} onChange={(e) => setEmail(e.target.value)} />
+                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" value={password} onChange={(e) => setPassword(e.target.value)} />
+                                            <button type="submit" className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
                                                 Register
                                             </button>
                                         </form>
+
                                         <p className="mt-4 text-gray-400 text-sm">
                                             Already have an account?{" "}
                                             <span
@@ -155,7 +236,6 @@ export default function LandingPage() {
                         )}
                     </section>
                 </div>
-
 
 
                 <section className=" flex flex-col items-center justify-center px-6 mt-16 sm:mt-30 py-5 border-3 border-[#535C91] pt-5 rounded-3xl bg-[#04081b] mx-30">
@@ -211,6 +291,17 @@ export default function LandingPage() {
                 </section>
                 < Footer />
             </div>
+            <ToastContainer
+                position="top-right"
+                autoClose={3000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                pauseOnHover
+                draggable
+                theme="dark"
+            />
+
         </>
     );
 }

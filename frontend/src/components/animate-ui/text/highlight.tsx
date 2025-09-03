@@ -49,7 +49,7 @@ function HighlightText({
       transition={{
     duration: 2,
     ease: "easeInOut",
-    delay: 3, 
+    delay: 2.6, 
   }}
       style={{
         backgroundImage: "linear-gradient(120deg, #535C91 0%, #7c81f3 100%)",
