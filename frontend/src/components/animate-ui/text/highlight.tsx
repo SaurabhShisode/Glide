@@ -57,7 +57,7 @@ function HighlightText({
         backgroundPosition: "0 90%",
         display: "inline-flex",
         alignItems: "center",
-        padding: "5px 10px",
+        padding: "0px 10px 10px",
       }}
       className={cn("relative inline-block justify-center rounded-xl", className)}
       {...props}

@@ -1,4 +1,4 @@
-import { useState, type ReactNode } from "react";
+import {  type ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
@@ -8,7 +8,7 @@ interface NavbarProps {
 }
 
 export default function Navbar({ setLoginStatus, children }: NavbarProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
@@ -22,8 +22,9 @@ export default function Navbar({ setLoginStatus, children }: NavbarProps) {
           
           <motion.h1
             layoutId="glide-logo"
-            className=" text-3xl font-comfortaa font-bold text-[#9290C3]"
+            className=" text-3xl font-comfortaa font-bold text-[#9290C3] cursor-pointer"
             style={{ width: "fit-content" }}
+            onClick={() => (window.location.href = "/")}
           >
             Glide
           </motion.h1>

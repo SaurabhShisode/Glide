@@ -221,7 +221,7 @@ const handleGoogleLogin = async () => {
                                             </button>
                                         </form>
 
-                                        <p className="mt-4 text-gray-400 text-sm">
+                                        <p className="text-center mt-4 text-gray-400 text-sm">
                                             Already have an account?{" "}
                                             <span
                                                 className="text-[#7c81f3] cursor-pointer hover:underline"
