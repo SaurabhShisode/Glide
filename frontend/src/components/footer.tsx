@@ -9,7 +9,7 @@ import GitHubIcon from '../assets/icons/github.svg';
 
 const Footer = () => {
   return (
-    <footer className=" text-[#9290C3] py-16 sm:py-24 px-4 sm:px-6 md:px-20 mt-40">
+    <footer className=" text-[#9290C3] py-16 sm:py-24 px-4 sm:px-6 md:px-20 mt-20">
       <div className="max-w-7xl mx-10 sm:mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12">
 
 
@@ -36,7 +36,7 @@ const Footer = () => {
           <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Explore</h3>
           <ul className="space-y-2 text-sm">
             <li><a href="#" className="hover:text-white transition">About Us</a></li>
-            <li><a href="#" className="hover:text-white transition">Our Farmers</a></li>
+            <li><a href="#" className="hover:text-white transition">Our Riders</a></li>
             <li><a href="#" className="hover:text-white transition">Sustainability</a></li>
             <li><a href="#" className="hover:text-white transition">Careers</a></li>
           </ul>

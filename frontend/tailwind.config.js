@@ -6,6 +6,8 @@ export default {
       fontFamily: {
         comfortaa: ["Comfortaa", "sans-serif"],
         raleway: ["Raleway", "sans-serif"],
+        oswald: ["Oswald", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"], 
       },
     },
   },
