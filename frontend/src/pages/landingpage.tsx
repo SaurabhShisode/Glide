@@ -4,13 +4,14 @@ import Footer from "../components/footer";
 import heroImage from "../assets/svgviewer-output.svg";
 
 import { motion, AnimatePresence } from "framer-motion";
-
 import { HighlightText } from '../components/animate-ui/text/highlight';
 
 export default function LandingPage() {
     const [filterStatus, setFilterStatus] = useState<'glidecampus' | 'glideaway'>('glidecampus');
     const [loginStatus, setLoginStatus] = useState<'yes' | 'no'>('no');
     const [showSplash, setShowSplash] = useState(true);
+
+    const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2000);
@@ -32,29 +33,23 @@ export default function LandingPage() {
                             className="text-3xl font-comfortaa font-bold"
                             style={{
                                 width: "fit-content",
-                                WebkitTextStroke: "1px #9290C3", 
-                                color: "transparent",           
+                                WebkitTextStroke: "1px #9290C3",
+                                color: "transparent",
                                 transition: "color 0.8s ease, WebkitTextStroke 0.8s ease"
                             }}
                             initial={{ scale: 4 }}
-                            animate={{
-                                scale: 2,
-                                color: "#9290C3",       
-                                
-                            }}
+                            animate={{ scale: 2, color: "#9290C3" }}
                             transition={{ duration: 0.8, ease: "easeInOut" }}
                         >
                             Glide
                         </motion.h1>
                     </motion.div>
-
                 )}
             </AnimatePresence>
 
-
             {!showSplash && <Navbar setLoginStatus={setLoginStatus} />}
             <div className="w-full min-h-screen bg-[#070F2B]">
-                <div className=" flex items-center justify-center px-6">
+                <div className="flex items-center justify-center px-6">
                     <section className="flex flex-col md:flex-row items-center max-w-6xl gap-40 mt-20">
                         <motion.div
                             className="relative -ml-40 md:-ml-60 lg:-ml-100"
@@ -65,11 +60,11 @@ export default function LandingPage() {
                             <img
                                 src={heroImage}
                                 alt="Glide Hero"
-                               
                                 className="w-[500px] md:w-[700px] lg:w-[900px] object-contain mt-10 fit-content"
                             />
                         </motion.div>
 
+                        {/* Hero section vs Auth */}
                         {loginStatus === 'no' ? (
                             <motion.div
                                 className="flex-1 text-center md:text-left px-7"
@@ -86,7 +81,10 @@ export default function LandingPage() {
                                     for faster, cheaper, and eco-friendly rides.
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
-                                    <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#1B1A55] text-white font-semibold hover:bg-[#535C91] transition">
+                                    <button
+                                        className="cursor-pointer px-6 py-3 rounded-2xl bg-[#1B1A55] text-white font-semibold hover:bg-[#535C91] transition"
+                                        onClick={() => setLoginStatus('yes')}
+                                    >
                                         Get Started
                                     </button>
                                     <button className="cursor-pointer px-6 py-3 rounded-2xl border border-white text-white font-semibold hover:bg-white hover:text-[#070F2B] transition">
@@ -101,24 +99,61 @@ export default function LandingPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                             >
-                                <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
-                                    Welcome Back!<br />Please Log In.
-                                </h1>
-                                <p className="mt-6 text-lg font-comfortaa text-gray-300">
-                                    Enter your credentials to access your account.
-                                </p>
-
-                                <form className="mt-8 flex flex-col gap-4">
-                                    <input type="email" placeholder="Email" className="p-3 rounded-md bg-gray-800 text-white" />
-                                    <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" />
-                                    <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
-                                        Log In
-                                    </button>
-                                </form>
+                                {authMode === "login" ? (
+                                    <>
+                                        <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
+                                            Welcome Back!<br />Please Log In.
+                                        </h1>
+                                        <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                                            Enter your credentials to access your account.
+                                        </p>
+                                        <form className="mt-8 flex flex-col gap-4">
+                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" />
+                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" />
+                                            <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
+                                                Log In
+                                            </button>
+                                        </form>
+                                        <p className="mt-4 text-gray-400 text-sm">
+                                            Don’t have an account?{" "}
+                                            <span
+                                                className="text-[#7c81f3] cursor-pointer hover:underline"
+                                                onClick={() => setAuthMode("register")}
+                                            >
+                                                Register
+                                            </span>
+                                        </p>
+                                    </>
+                                ) : (
+                                    <>
+                                        <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
+                                            Create an Account
+                                        </h1>
+                                        <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                                            Enter your credentials to create your account.
+                                        </p>
+                                        <form className="mt-8 flex flex-col gap-4">
+                                            <input type="text" placeholder="Name" className="p-3 rounded-md bg-gray-800 text-white" />
+                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" />
+                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" />
+                                            <button className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
+                                                Register
+                                            </button>
+                                        </form>
+                                        <p className="mt-4 text-gray-400 text-sm">
+                                            Already have an account?{" "}
+                                            <span
+                                                className="text-[#7c81f3] cursor-pointer hover:underline"
+                                                onClick={() => setAuthMode("login")}
+                                            >
+                                                Log In
+                                            </span>
+                                        </p>
+                                    </>
+                                )}
                             </motion.div>
                         )}
                     </section>
-
                 </div>
 
 
