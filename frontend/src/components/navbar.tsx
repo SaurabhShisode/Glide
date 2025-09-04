@@ -1,16 +1,10 @@
-import {  type ReactNode } from "react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 interface NavbarProps {
   setLoginStatus: (status: "yes" | "no") => void;
-  children?: ReactNode; 
 }
 
-export default function Navbar({ setLoginStatus, children }: NavbarProps) {
-  
-  const navigate = useNavigate();
-
+export default function Navbar({ setLoginStatus }: NavbarProps) {
   const handleLoginClick = () => {
     setLoginStatus("yes");
   };
@@ -19,10 +13,9 @@ export default function Navbar({ setLoginStatus, children }: NavbarProps) {
     <nav className="w-full left-0 z-50 py-5 bg-[#070F2B]">
       <div className="grid grid-cols-12 mx-5 px-6 lg:px-6 items-center gap-10 h-16">
         <div className="col-span-3">
-          
           <motion.h1
             layoutId="glide-logo"
-            className=" text-3xl font-comfortaa font-bold text-[#9290C3] cursor-pointer"
+            className="text-3xl font-comfortaa font-bold text-[#9290C3] cursor-pointer"
             style={{ width: "fit-content" }}
             onClick={() => (window.location.href = "/")}
           >
