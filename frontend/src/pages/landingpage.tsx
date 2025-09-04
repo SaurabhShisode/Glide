@@ -30,42 +30,42 @@ export default function LandingPage() {
     }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
-    localStorage.setItem("token", res.data.token);
-    toast.success("Login successful!");
-    navigate("/home");  
-  } catch (err: any) {
-    toast.error(err.response?.data?.message || "Login failed");
-  }
-};
+        e.preventDefault();
+        try {
+            const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+            localStorage.setItem("token", res.data.token);
+            toast.success("Login successful!");
+            navigate("/home");
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Login failed");
+        }
+    };
 
-const handleRegister = async (e: React.FormEvent) => {
-  e.preventDefault();
-  try {
-    const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
-    localStorage.setItem("token", res.data.token);
-    toast.success("Registration successful!");
-    navigate("/home");   
-  } catch (err: any) {
-    toast.error(err.response?.data?.message || "Registration failed");
-  }
-};
+    const handleRegister = async (e: React.FormEvent) => {
+        e.preventDefault();
+        try {
+            const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
+            localStorage.setItem("token", res.data.token);
+            toast.success("Registration successful!");
+            navigate("/home");
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Registration failed");
+        }
+    };
 
-const handleGoogleLogin = async () => {
-  try {
-    const result = await signInWithPopup(auth, googleProvider);
-    const idToken = await result.user.getIdToken();
+    const handleGoogleLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth, googleProvider);
+            const idToken = await result.user.getIdToken();
 
-    const res = await axios.post("http://localhost:5000/api/auth/google", { idToken });
-    localStorage.setItem("token", res.data.token);
-    toast.success("Google login successful!");
-    navigate("/home");   
-  } catch (err: any) {
-    toast.error(err.response?.data?.message || "Google login failed");
-  }
-};
+            const res = await axios.post("http://localhost:5000/api/auth/google", { idToken });
+            localStorage.setItem("token", res.data.token);
+            toast.success("Google login successful!");
+            navigate("/home");
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Google login failed");
+        }
+    };
 
     return (
         <>
@@ -259,7 +259,7 @@ const handleGoogleLogin = async () => {
                         }
                     </div>
                     <div className="relative w-full overflow-x-auto py-6">
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 px-4 sm:px-16 mb-10 ">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 px-4 sm:px-16  ">
                             {(filterStatus === "glidecampus"
                                 ? [
                                     "Open the app and see nearby campus rides",
@@ -276,15 +276,21 @@ const handleGoogleLogin = async () => {
                             ).map((step, index) => (
                                 <div
                                     key={index}
-                                    className="relative flex flex-col items-center min-w-[220px] bg-[#1B1A55] rounded-3xl py-14 px-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 mt-10 min-h-[250px] justify-between"
+                                    className="group relative flex flex-col items-center min-w-[220px] bg-[#1B1A55] rounded-3xl py-14 px-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 mt-10 min-h-[250px] justify-between"
                                 >
-                                    <div className="absolute -top-10 flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-tr from-[#6975c1] to-[#474a8f] text-white font-bold text-5xl shadow-lg font-oswald">
+                                    <div
+                                        className="absolute -top-10 flex items-center justify-center h-20 w-20 rounded-full 
+               bg-gradient-to-tr from-[#6975c1] to-[#474a8f] text-white font-bold text-5xl 
+               shadow-lg font-oswald transition-colors duration-300 
+               group-hover:from-[#ff8a00] group-hover:to-[#ff4d4d]"
+                                    >
                                         {index + 1}
                                     </div>
                                     <div className="text-white text-center text-lg font-poppins mt-6">
                                         {step}
                                     </div>
                                 </div>
+
                             ))}
                         </div>
                     </div>
