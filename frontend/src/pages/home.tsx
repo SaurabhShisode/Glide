@@ -2,14 +2,16 @@ import { useState } from "react";
 import userImg from "../assets/icons/user.svg";
 import clipboardImg from "../assets/icons/clipboard.svg";
 import Footer from "@/components/footer";
+import coinImg from "../assets/icons/coin.svg";
 import { StarsBackground } from "@/components/animate-ui/backgrounds/stars";
+import { Tabs } from "@/components/animate-ui/components/tabs";
 
 export default function HomePage() {
     const [active, setActive] = useState("glide-campus");
 
 
     const [campusSource, setCampusSource] = useState("");
-    const [campusDestination, setCampusDestination] = useState("");
+
 
 
 
@@ -22,8 +24,7 @@ export default function HomePage() {
         e.preventDefault();
         const payload = {
             source: campusSource,
-            destination: campusDestination,
-
+            
         };
 
         try {
@@ -80,7 +81,7 @@ export default function HomePage() {
                     </div>
 
 
-                    <div className="col-span-6">
+                    <div className="col-span-3">
                         <ul className="hidden md:flex gap-8 font-comfortaa text-[#9290C3] font-medium">
 
                             <li
@@ -119,7 +120,15 @@ export default function HomePage() {
                     </div>
 
 
-                    <div className="col-span-3 flex  gap-5">
+                    <div className="col-span-6 flex gap-10">
+                        {active === "glide-campus" && (
+                            <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer hover:bg-white px-4">
+                                <img className="rounded-full" src={coinImg} width="25px" />
+                                <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">
+                                    Glide-Coins
+                                </p>
+                            </div>
+                        )}
                         <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer hover:bg-white px-4">
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
                             <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">Glide-History</p>
@@ -151,7 +160,7 @@ export default function HomePage() {
                                 className="mt-10 flex flex-col gap-6"
                                 onSubmit={handleGlideCampusSubmit}
                             >
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div className="grid grid-cols-1  gap-6">
                                     <div className="flex flex-col">
                                         <label className="text-gray-300 font-comfortaa mb-2">
                                             Starting Point
@@ -167,20 +176,7 @@ export default function HomePage() {
                                         </select>
                                     </div>
 
-                                    <div className="flex flex-col">
-                                        <label className="text-gray-300 font-comfortaa mb-2">
-                                            Destination
-                                        </label>
-                                        <select
-                                            value={campusDestination}
-                                            onChange={(e) => setCampusDestination(e.target.value)}
-                                            className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
-                        focus:border-[#7c81f3] focus:ring-2 focus:ring-[#7c81f3] transition 
-                        cursor-pointer appearance-none"
-                                        >
-                                            <option value="hostel-a">Boys Hostel B-1</option> <option value="hostel-b">Boys Hostel B-2</option> <option value="canteen">AB-2</option> <option value="gh-b2">Girls Hostel B-2</option> <option value="gh-b1">Girls Hostel B-1</option> <option value="mph">MPH</option> <option value="ab-1">AB-1</option> <option value="arch-lab">Architecture Lab</option> <option value="lab-complex">Lab Complex</option>
-                                        </select>
-                                    </div>
+                                    
                                 </div>
 
 
