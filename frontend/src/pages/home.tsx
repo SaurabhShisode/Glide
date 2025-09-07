@@ -8,12 +8,13 @@ import { ToastContainer, toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
 import findImg from "../assets/icons/find.svg";
 import addImg from "../assets/icons/add.svg";
+import BouncingDotsLoader from "@/components/bouncingdotsloader";
 
 export default function HomePage() {
     const [active, setActive] = useState("glide-campus");
     const [campusTab, setCampusTab] = useState<"find" | "add">("find");
     const [awayTab, setAwayTab] = useState<"find" | "add">("find");
-
+    const [loadingGlides, setLoadingGlides] = useState(false);
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
     const [campusSource, setCampusSource] = useState("");
@@ -41,14 +42,17 @@ export default function HomePage() {
 
         try {
             if (campusTab === "find") {
+                setLoadingGlides(true);
                 const res = await fetch(`${API_BASE}/glide-campus?source=${campusSource}`);
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 const data = await res.json();
                 if (res.ok) {
                     setCampusResults(data.rides || []);
-              
+
                 } else {
                     toast.error(data.message || "Failed to fetch campus glides");
                 }
+
             } else {
                 if (!user) {
                     toast.error("You must be logged in to create a campus glide");
@@ -70,6 +74,8 @@ export default function HomePage() {
         } catch (error) {
             console.error("Error handling campus glide:", error);
             toast.error("Something went wrong");
+        } finally {
+            setLoadingGlides(false);
         }
     };
 
@@ -79,15 +85,17 @@ export default function HomePage() {
 
         try {
             if (awayTab === "find") {
+                setLoadingGlides(true);
                 const query = new URLSearchParams({
                     source: awaySource,
                     destination: awayDestination,
                 });
+                await new Promise((resolve) => setTimeout(resolve, 2000));
                 const res = await fetch(`${API_BASE}/glide-away?${query.toString()}`);
                 const data = await res.json();
                 if (res.ok) {
                     setAwayResults(data.rides || []);
-                  
+
                 } else {
                     toast.error(data.message || "Failed to fetch away glides");
                 }
@@ -123,6 +131,8 @@ export default function HomePage() {
         } catch (error) {
             console.error("Error handling away glide:", error);
             toast.error("Something went wrong");
+        } finally {
+            setLoadingGlides(false);
         }
     };
 
@@ -206,11 +216,11 @@ export default function HomePage() {
                 </div>
             </nav>
 
-            <div className="relative w-full ">
+            <div className="relative w-full mb-[-44px]">
                 <div className="absolute top-0 left-0 w-full h-[550px] ">
                     <StarsBackground className="absolute inset-0 flex items-center justify-center " />
                 </div>
-                <section className="relative max-w-4xl pt-60 items-center mx-auto rounded-3xl mb-40">
+                <section className="relative max-w-4xl pt-60 items-center mx-auto rounded-3xl mb-20">
                     {active === "glide-campus" ? (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
                             <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
@@ -503,50 +513,110 @@ export default function HomePage() {
                                     )}
                                 </AnimatePresence>
                             </div>
+
                         </div>
+
 
                     )}
                 </section>
+
+
             </div>
-            {campusTab === "find" && campusResults.length > 0 && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-semibold">Available Campus Glides</h3>
-                    <ul className="space-y-3 mt-2">
-                        {campusResults.map((ride, idx) => (
-                            <li key={idx} className="p-3 border rounded-lg bg-gray-50">
-                                <p><strong>Source:</strong> {ride.source}</p>
-                                <p><strong>Creator:</strong> {ride.creator?.name || "Unknown"}</p>
-                            </li>
-                        ))}
-                    </ul>
+            {loadingGlides && (
+                <div className="flex justify-center items-center text-white/80 mt[-20px] mb-20">
+                    <BouncingDotsLoader />
+                </div>
+
+            )}
+
+            {campusTab === "find" && active === "glide-campus" && (
+                <div className="mx-40">
+                    {campusResults.length > 0 ? (
+                        <div>
+                        <h3 className="text-lg font-semibold text-gray-700 mb-4">
+                        Available Campus Glides
+                    </h3>
+                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {campusResults.map((ride, idx) => (
+                                <li
+                                    key={idx}
+                                    className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 font-comfortaa"
+                                >
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                        <strong>Source:</strong> {ride.source}
+                                    </p>
+                                    <p className="text-gray-600 dark:text-gray-300">
+                                        <strong>Creator:</strong> {ride.creator?.name || "Unknown"}
+                                    </p>
+                                </li>
+                            ))}
+                        </ul>
+                        </div>
+                    ) : (
+                        <div>
+                        <h1 className="font-oswald text-5xl text-white text-center">Walking ain't that bad.</h1>
+                        <p className="text-gray-500 dark:text-gray-400 text-center py-5">
+                             No campus glides found. Try searching with a different source. 
+                        </p>
+                        </div>
+                    )}
                 </div>
             )}
 
 
-            {awayTab === "find" && awayResults.length > 0 && active !== "glide-campus" && (
-                <div className="mt-6 mx-40">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Available Away Glides</h3>
-                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {awayResults.map((ride, idx) => (
-                            <li
-                                key={idx}
-                                className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 font-comfortaa"
-                            >
-                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">From:</span> {ride.source}</p>
-                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">To:</span> {ride.destination}</p>
-                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Date:</span> {ride.date}</p>
-                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Price:</span> ₹{ride.price}</p>
-                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Creator:</span> {ride.creator?.name || "Unknown"}</p>
+            {awayTab === "find" && active !== "glide-campus" && (
+                <div className="mx-40">
+                    <h3 className="text-xl font-semibold text-white font-poppins mb-4">
+                        Available Away Glides
+                    </h3>
 
-                                <button className="mt-4 w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-purple-600 transition">
-                                    Request Ride
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    {awayResults.length > 0 ? (
+                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {awayResults.map((ride, idx) => (
+                                <li
+                                    key={idx}
+                                    className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 font-comfortaa"
+                                >
+                                   
+                                    <div className="flex items-center justify-between mb-4">
+                                        <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+                                            {ride.source}
+                                        </span>
+                                        <span className="text-gray-500 dark:text-gray-400 text-sm font-semibold">
+                                            ➝
+                                        </span>
+                                        <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+                                            {ride.destination}
+                                        </span>
+                                    </div>
+
+                                    <div className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
+                                        <p>
+                                            <span className="font-semibold">Date:</span> {ride.date}
+                                        </p>
+                                        <p>
+                                            <span className="font-semibold">Price:</span> ₹{ride.price}
+                                        </p>
+                                        <p>
+                                            <span className="font-semibold">Creator:</span>{" "}
+                                            {ride.creator?.name || "Unknown"}
+                                        </p>
+                                    </div>
+
+                                    <button className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer">
+                                        Request Ride
+                                    </button>
+                                </li>
+                            ))}
+                        </ul>
+                    ) : (
+                        <p className="text-gray-400 dark:text-gray-500 text-center py-10">
+                            🚗 No away glides available right now. Check back later.
+                        </p>
+                    )}
                 </div>
-
             )}
+
 
 
 
