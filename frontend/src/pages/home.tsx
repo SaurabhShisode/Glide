@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import userImg from "../assets/icons/user.svg";
 import clipboardImg from "../assets/icons/clipboard.svg";
 import Footer from "@/components/footer";
@@ -14,10 +14,8 @@ export default function HomePage() {
     const [campusTab, setCampusTab] = useState<"find" | "add">("find");
     const [awayTab, setAwayTab] = useState<"find" | "add">("find");
 
-    // ✅ API base URL
     const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
-    // State
     const [campusSource, setCampusSource] = useState("");
     const [campusResults, setCampusResults] = useState<any[]>([]);
 
@@ -27,7 +25,15 @@ export default function HomePage() {
     const [awayPrice, setAwayPrice] = useState("");
     const [awayResults, setAwayResults] = useState<any[]>([]);
 
-    const currentUserId = "66e05afc9a1234567890abcd";
+    const [user, setUser] = useState<any>(null);
+
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem("glideUser");
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
 
 
     const handleGlideCampusSubmit = async (e: React.FormEvent) => {
@@ -39,12 +45,16 @@ export default function HomePage() {
                 const data = await res.json();
                 if (res.ok) {
                     setCampusResults(data.rides || []);
-                    toast.success("Campus glides fetched successfully");
+              
                 } else {
                     toast.error(data.message || "Failed to fetch campus glides");
                 }
             } else {
-                const payload = { source: campusSource, creator: currentUserId };
+                if (!user) {
+                    toast.error("You must be logged in to create a campus glide");
+                    return;
+                }
+                const payload = { source: campusSource, creator: user._id };
                 const res = await fetch(`${API_BASE}/glide-campus`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -63,7 +73,7 @@ export default function HomePage() {
         }
     };
 
-    // ✅ Away Glide
+
     const handleGlideAwaySubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -77,17 +87,26 @@ export default function HomePage() {
                 const data = await res.json();
                 if (res.ok) {
                     setAwayResults(data.rides || []);
-                    toast.success("Away glides fetched successfully");
+                  
                 } else {
                     toast.error(data.message || "Failed to fetch away glides");
                 }
             } else {
+                alert(JSON.stringify(user))
+                if (!user) {
+                    toast.error("You must be logged in to create an away glide");
+                    return;
+                }
+                if (!awaySource || !awayDestination || !awayDate || !awayPrice) {
+                    toast.error(" required");
+                    return;
+                }
                 const payload = {
                     source: awaySource,
                     destination: awayDestination,
                     date: awayDate,
                     price: Number(awayPrice),
-                    creator: currentUserId,
+                    creator: user.id,
                 };
                 const res = await fetch(`${API_BASE}/glide-away`, {
                     method: "POST",
@@ -106,6 +125,7 @@ export default function HomePage() {
             toast.error("Something went wrong");
         }
     };
+
     return (
         <div className="w-full min-h-screen bg-[#070F2B]">
 
@@ -165,9 +185,9 @@ export default function HomePage() {
                     <div className="col-span-6 flex gap-10">
                         {active === "glide-campus" && (
                             <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer hover:bg-white px-4">
-                                <img className="rounded-full" src={coinImg} width="25px" />
-                                <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">
-                                    Glide-Coins
+                                <img className="rounded-full" src={coinImg} width="23px" />
+                                <p className="font-comfortaa text-[#9290C3] text-base font-semibold group-hover:text-[#070F2B]">
+                                    {user?.glidePoints ?? 0}
                                 </p>
                             </div>
                         )}
@@ -175,10 +195,13 @@ export default function HomePage() {
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
                             <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">Glide-History</p>
                         </div>
-                        <div className=" group flex items-center gap-2   p-2 hover:bg-white rounded-4xl cursor-pointer px-4">
-                            <img className="rounded-full  " src={userImg} width="30px"></img>
-                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">Account</p>
+                        <div className="group flex items-center gap-2 p-2 hover:bg-white rounded-4xl cursor-pointer px-4">
+                            <img className="rounded-full" src={userImg} width="30px" />
+                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">
+                                Hello, {user?.name ?? "Lion"}
+                            </p>
                         </div>
+
                     </div>
                 </div>
             </nav>
@@ -187,14 +210,14 @@ export default function HomePage() {
                 <div className="absolute top-0 left-0 w-full h-[550px] ">
                     <StarsBackground className="absolute inset-0 flex items-center justify-center " />
                 </div>
-                <section className="relative max-w-6xl pt-60 items-center mx-auto rounded-3xl mb-40">
+                <section className="relative max-w-4xl pt-60 items-center mx-auto rounded-3xl mb-40">
                     {active === "glide-campus" ? (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
                             <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
                                 Glide Through Campus
                             </h1>
                             <p className="mt-6 text-lg font-comfortaa text-gray-300">
-                                Switch between finding or adding a campus glide 
+                                Switch between finding or adding a campus glide
                             </p>
 
 
@@ -328,7 +351,7 @@ export default function HomePage() {
                                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                         }`}
                                 ><img src={addImg} width="18px"></img>
-                                   <p> Add Glide</p>
+                                    <p> Add Glide</p>
                                 </button>
                             </div>
 
@@ -405,13 +428,13 @@ export default function HomePage() {
                                             onSubmit={handleGlideAwaySubmit}
                                             className="flex flex-col gap-6"
                                         >
-                                            {/* Source */}
+
                                             <div className="flex flex-col">
                                                 <label className="text-gray-300 font-comfortaa mb-2">
                                                     Source Point
                                                 </label>
                                                 <select
-                                                    
+
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
@@ -423,7 +446,7 @@ export default function HomePage() {
                                                     <option value="rkmp">RKMP Railway Station</option>
                                                     <option value="nadra-bus">Nadra Bus Stand</option>
                                                     <option value="db-mall">DB Mall</option>
-                                                    </select>
+                                                </select>
                                             </div>
 
 
@@ -432,10 +455,10 @@ export default function HomePage() {
                                                     Destination Point
                                                 </label>
                                                 <select
-                                                    
+
                                                     value={awayDestination}
                                                     onChange={(e) => setAwayDestination(e.target.value)}
-                                                    
+
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 ><option value="">Select Destination</option>
                                                     <option value="vit-highway">VIT Highway</option>
@@ -444,10 +467,10 @@ export default function HomePage() {
                                                     <option value="rkmp">RKMP Railway Station</option>
                                                     <option value="nadra-bus">Nadra Bus Stand</option>
                                                     <option value="db-mall">DB Mall</option>
-                                                    </select>
+                                                </select>
                                             </div>
 
-                                            
+
                                             <div className="flex flex-col">
                                                 <label className="text-gray-300 font-comfortaa mb-2">Date</label>
                                                 <input
@@ -458,7 +481,7 @@ export default function HomePage() {
                                                 />
                                             </div>
 
-                                            
+
                                             <div className="flex flex-col">
                                                 <label className="text-gray-300 font-comfortaa mb-2">Price</label>
                                                 <input
@@ -500,22 +523,31 @@ export default function HomePage() {
             )}
 
 
-            {awayTab === "find" && awayResults.length > 0 && (
-                <div className="mt-6">
-                    <h3 className="text-lg font-semibold">Available Away Glides</h3>
-                    <ul className="space-y-3 mt-2">
+            {awayTab === "find" && awayResults.length > 0 && active !== "glide-campus" && (
+                <div className="mt-6 mx-40">
+                    <h3 className="text-lg font-semibold text-gray-700 mb-4">Available Away Glides</h3>
+                    <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {awayResults.map((ride, idx) => (
-                            <li key={idx} className="p-3 border rounded-lg bg-gray-50">
-                                <p><strong>From:</strong> {ride.source}</p>
-                                <p><strong>To:</strong> {ride.destination}</p>
-                                <p><strong>Date:</strong> {ride.date}</p>
-                                <p><strong>Price:</strong> ₹{ride.price}</p>
-                                <p><strong>Creator:</strong> {ride.creator?.name || "Unknown"}</p>
+                            <li
+                                key={idx}
+                                className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition-shadow duration-300 transform hover:-translate-y-1 font-comfortaa"
+                            >
+                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">From:</span> {ride.source}</p>
+                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">To:</span> {ride.destination}</p>
+                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Date:</span> {ride.date}</p>
+                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Price:</span> ₹{ride.price}</p>
+                                <p className="text-gray-600 dark:text-gray-300"><span className="font-semibold">Creator:</span> {ride.creator?.name || "Unknown"}</p>
+
+                                <button className="mt-4 w-full px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-xl font-medium hover:from-indigo-600 hover:to-purple-600 transition">
+                                    Request Ride
+                                </button>
                             </li>
                         ))}
                     </ul>
                 </div>
+
             )}
+
 
 
             <div className="mt-20">
