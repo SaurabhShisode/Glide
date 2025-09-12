@@ -35,11 +35,11 @@ export default function LandingPage() {
             const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
-           
+
 
             toast.success(`Logged in as ${res.data.user.email}`, {
                 style: { background: '#14532d', color: 'white' },
-                onClose: () => navigate("/home"), 
+                onClose: () => navigate("/home"),
             });
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Login failed");
@@ -53,7 +53,7 @@ export default function LandingPage() {
             const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
-           
+
 
             toast.success("Registration successful!", {
                 onClose: () => navigate("/home"),
@@ -72,7 +72,7 @@ export default function LandingPage() {
             const res = await axios.post("http://localhost:5000/api/auth/google", { idToken });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
-           
+
 
             toast.success("Google login successful!", {
                 onClose: () => navigate("/home"),
@@ -311,8 +311,10 @@ export default function LandingPage() {
                         </div>
                     </div>
                 </section>
+                
                 < Footer />
             </div>
+
             <ToastContainer
                 position="top-right"
                 autoClose={3000}

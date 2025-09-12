@@ -58,7 +58,8 @@ export default function HomePage() {
                     toast.error("You must be logged in to create a campus glide");
                     return;
                 }
-                const payload = { source: campusSource, creator: user._id };
+                const payload = { source: campusSource, creator: user.id };
+                console.log(payload.creator);
                 const res = await fetch(`${API_BASE}/glide-campus`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -276,18 +277,18 @@ export default function HomePage() {
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
                                                     <option value="">Select source</option>
-                                                    <option value="bh-b1">Boys Hostel B-1</option>
-                                                    <option value="bh-b2">Boys Hostel B-2</option>
-                                                    <option value="ab2">AB-2</option>
-                                                    <option value="ab1">AB-1</option>
-                                                    <option value="gh-b2">Girls Hostel B-2</option>
-                                                    <option value="gh-b1">Girls Hostel B-1</option>
+                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="AB-2">AB-2</option>
+                                                    <option value="AB-1">AB-1</option>
+                                                    <option value="Girls Hostel B-2">Girls Hostel B-2</option>
+                                                    <option value="Girls Hostel B-1">Girls Hostel B-1</option>
                                                 </select>
                                             </div>
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-white hover:text-[#474a8f] hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
                                             </button>
@@ -314,18 +315,18 @@ export default function HomePage() {
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
                                                     <option value="">Select source</option>
-                                                    <option value="bh-b1">Boys Hostel B-1</option>
-                                                    <option value="bh-b2">Boys Hostel B-2</option>
-                                                    <option value="ab2">AB-2</option>
-                                                    <option value="ab1">AB-1</option>
-                                                    <option value="gh-b2">Girls Hostel B-2</option>
-                                                    <option value="gh-b1">Girls Hostel B-1</option>
+                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="AB-2">AB-2</option>
+                                                    <option value="AB-1">AB-1</option>
+                                                    <option value="Girls Hostel B-2">Girls Hostel B-2</option>
+                                                    <option value="Girls Hostel B-1">Girls Hostel B-1</option>
                                                 </select>
                                             </div>
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-white hover:text-[#474a8f] hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Add New Glide
                                             </button>
@@ -391,16 +392,15 @@ export default function HomePage() {
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
                                                     <option value="">Select source</option>
-                                                    <option value="vit-highway">VIT Highway</option>
-                                                    <option value="bhopal">Bhopal</option>
-                                                    <option value="indore">Indore</option>
-                                                    <option value="rkmp">RKMP Railway Station</option>
-                                                    <option value="nadra-bus">Nadra Bus Stand</option>
-                                                    <option value="db-mall">DB Mall</option>
+                                                    <option value="VIT Highway">VIT Highway</option>
+                                                    <option value="Bhopal">Bhopal</option>
+                                                    <option value="Indore">Indore</option>
+                                                    <option value="RKMP Railway Station">RKMP Railway Station</option>
+                                                    <option value="Nadra Bus Stand">Nadra Bus Stand</option>
+                                                    <option value="DB Mall">DB Mall</option>
                                                 </select>
                                             </div>
 
-                                            {/* Destination */}
                                             <div className="flex flex-col">
                                                 <label className="text-gray-300 font-comfortaa mb-2">
                                                     Destination Point
@@ -412,18 +412,18 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 ><option value="">Select Destination</option>
-                                                    <option value="vit-highway">VIT Highway</option>
-                                                    <option value="bhopal">Bhopal</option>
-                                                    <option value="indore">Indore</option>
-                                                    <option value="rkmp">RKMP Railway Station</option>
-                                                    <option value="nadra-bus">Nadra Bus Stand</option>
-                                                    <option value="db-mall">DB Mall</option>
+                                                    <option value="VIT Highway">VIT Highway</option>
+                                                    <option value="Bhopal">Bhopal</option>
+                                                    <option value="Indore">Indore</option>
+                                                    <option value="RKMP Railway Station">RKMP Railway Station</option>
+                                                    <option value="Nadra Bus Stand">Nadra Bus Stand</option>
+                                                    <option value="DB Mall">DB Mall</option>
                                                 </select>
                                             </div>
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-white hover:text-[#474a8f] hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
                                             </button>
@@ -505,7 +505,7 @@ export default function HomePage() {
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-white hover:text-[#474a8f] hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white  text-lg hover:bg-[#6d72ff] hover:shadow-2xl font-bold transition-all duration-300 font-comfortaa"
                                             >
                                                 Add New Glide
                                             </button>
@@ -533,31 +533,41 @@ export default function HomePage() {
                 <div className="mx-40">
                     {campusResults.length > 0 ? (
                         <div>
-                        <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                        Available Campus Glides
-                    </h3>
-                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {campusResults.map((ride, idx) => (
-                                <li
-                                    key={idx}
-                                    className="p-5 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-1 font-comfortaa"
-                                >
-                                    <p className="text-gray-600 dark:text-gray-300">
-                                        <strong>Source:</strong> {ride.source}
-                                    </p>
-                                    <p className="text-gray-600 dark:text-gray-300">
-                                        <strong>Creator:</strong> {ride.creator?.name || "Unknown"}
-                                    </p>
-                                </li>
-                            ))}
-                        </ul>
+                            <h3 className="text-xl font-semibold text-white font-poppins mb-7 mt-10">
+                                Available Campus Glides
+                            </h3>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                                {campusResults.map((ride, idx) => (
+                                    <li
+                                        key={idx}
+                                        className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform  font-comfortaa cursor-pointer"
+                                    >
+                                        <div className="flex flex-col gap-5">
+
+                                            <span className=" text-lg  w-max
+                                            ml-2 px-4 py-2 pt-3 rounded-lg justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30  tracking-wide">
+                                                {ride.source}
+                                            </span>
+
+                                            <span className="px-3 py-1 rounded-xl  text-white text-lg font-medium w-max">
+                                                <span className="text-gray-400">Glide-owner:</span> {ride.creator?.name || "Unknown"}
+                                            </span>
+                                            <button className="text-white text-lg bg-[#474a8f] px-5 p-3 rounded-xl cursor-pointer hover:bg-[#6d72ff] transition duration-300 font-comfortaa">
+                                               Book
+                                            </button>
+                                        </div>
+                                    </li>
+
+                                ))}
+                            </ul>
                         </div>
                     ) : (
                         <div>
-                        <h1 className="font-oswald text-5xl text-white text-center">Walking ain't that bad.</h1>
-                        <p className="text-gray-500 dark:text-gray-400 text-center py-5">
-                             No campus glides found. Try searching with a different source. 
-                        </p>
+
+                            <h1 className="font-oswald text-5xl text-white text-center">Walking ain't that bad.</h1>
+                            <p className="text-gray-500 dark:text-gray-400 text-center py-5">
+                                No campus glides found. Try searching with a different source.
+                            </p>
                         </div>
                     )}
                 </div>
@@ -566,53 +576,59 @@ export default function HomePage() {
 
             {awayTab === "find" && active !== "glide-campus" && (
                 <div className="mx-40">
-                    <h3 className="text-xl font-semibold text-white font-poppins mb-4">
-                        Available Away Glides
-                    </h3>
+
 
                     {awayResults.length > 0 ? (
-                        <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            {awayResults.map((ride, idx) => (
-                                <li
-                                    key={idx}
-                                    className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 font-comfortaa"
-                                >
-                                   
-                                    <div className="flex items-center justify-between mb-4">
-                                        <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
-                                            {ride.source}
-                                        </span>
-                                        <span className="text-gray-500 dark:text-gray-400 text-sm font-semibold">
-                                            ➝
-                                        </span>
-                                        <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
-                                            {ride.destination}
-                                        </span>
-                                    </div>
+                        <div>
+                            <h3 className="text-xl font-semibold text-white font-poppins mb-4">
+                                Available Away Glides
+                            </h3>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                {awayResults.map((ride, idx) => (
+                                    <li
+                                        key={idx}
+                                        className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 font-comfortaa"
+                                    >
 
-                                    <div className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
-                                        <p>
-                                            <span className="font-semibold">Date:</span> {ride.date}
-                                        </p>
-                                        <p>
-                                            <span className="font-semibold">Price:</span> ₹{ride.price}
-                                        </p>
-                                        <p>
-                                            <span className="font-semibold">Creator:</span>{" "}
-                                            {ride.creator?.name || "Unknown"}
-                                        </p>
-                                    </div>
+                                        <div className="flex items-center justify-between mb-4">
+                                            <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+                                                {ride.source}
+                                            </span>
+                                            <span className="text-gray-500 dark:text-gray-400 text-sm font-semibold">
+                                                ➝
+                                            </span>
+                                            <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+                                                {ride.destination}
+                                            </span>
+                                        </div>
 
-                                    <button className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer">
-                                        Request Ride
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
+                                        <div className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
+                                            <p>
+                                                <span className="font-semibold">Date:</span> {ride.date}
+                                            </p>
+                                            <p>
+                                                <span className="font-semibold">Price:</span> ₹{ride.price}
+                                            </p>
+                                            <p>
+                                                <span className="font-semibold">Creator:</span>{" "}
+                                                {ride.creator?.name || "Unknown"}
+                                            </p>
+                                        </div>
+
+                                        <button className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer">
+                                            Request Ride
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
                     ) : (
-                        <p className="text-gray-400 dark:text-gray-500 text-center py-10">
-                            🚗 No away glides available right now. Check back later.
-                        </p>
+                        <div>
+                            <h1 className="font-oswald text-5xl text-white text-center">No Away glides found.</h1>
+                            <p className="text-gray-500 dark:text-gray-400 text-center py-5">
+                                Why not create one and be the first?
+                            </p>
+                        </div>
                     )}
                 </div>
             )}
