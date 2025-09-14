@@ -21,7 +21,8 @@ export default function HomePage() {
 
     const [campusSource, setCampusSource] = useState("");
     const [campusResults, setCampusResults] = useState<any[]>([]);
-
+    const [displayCampusRes, setdisplayCampusRes] = useState(false);
+    const [displayAwayRes, setdisplayAwayRes] = useState(false);
     const [awaySource, setAwaySource] = useState("");
     const [awayDestination, setAwayDestination] = useState("");
     const [awayDate, setAwayDate] = useState("");
@@ -79,6 +80,7 @@ export default function HomePage() {
             toast.error("Something went wrong");
         } finally {
             setLoadingGlides(false);
+            setdisplayCampusRes(true);
         }
     };
 
@@ -137,6 +139,7 @@ export default function HomePage() {
             toast.error("Something went wrong");
         } finally {
             setLoadingGlides(false);
+            setdisplayAwayRes(true);
         }
     };
 
@@ -291,6 +294,7 @@ export default function HomePage() {
 
                                             <button
                                                 type="submit"
+                                                
                                                 className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
@@ -317,7 +321,7 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                    <option value="">Select source</option>
+                                                    
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
                                                     <option value="AB-2">AB-2</option>
@@ -394,7 +398,7 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                    <option value="">Select source</option>
+                                                   
                                                     <option value="VIT Highway">VIT Highway</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
@@ -414,7 +418,7 @@ export default function HomePage() {
                                                     onChange={(e) => setAwayDestination(e.target.value)}
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
-                                                ><option value="">Select Destination</option>
+                                                >
                                                     <option value="VIT Highway">VIT Highway</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
@@ -451,7 +455,7 @@ export default function HomePage() {
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
-                                                ><option value="">Select Destination</option>
+                                                >
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
                                                     <option value="VIT Highway">VIT Highway</option>
@@ -473,7 +477,7 @@ export default function HomePage() {
                                                     onChange={(e) => setAwayDestination(e.target.value)}
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
-                                                ><option value="">Select Destination</option>
+                                                >
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
                                                     <option value="VIT Highway">VIT Highway</option>
@@ -532,7 +536,7 @@ export default function HomePage() {
 
             )}
 
-            {campusTab === "find" && active === "glide-campus" && (
+            {campusTab === "find" && active === "glide-campus" && displayCampusRes && (
                 <div className="mx-40">
                     {campusResults.length > 0 ? (
                         <div>
@@ -598,7 +602,7 @@ export default function HomePage() {
             )}
 
 
-            {awayTab === "find" && active !== "glide-campus" && (
+            {awayTab === "find" && active !== "glide-campus" && displayAwayRes && (
                 <div className="mx-40">
 
 
