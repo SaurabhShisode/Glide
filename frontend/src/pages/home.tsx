@@ -9,6 +9,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import findImg from "../assets/icons/find.svg";
 import addImg from "../assets/icons/add.svg";
 import BouncingDotsLoader from "@/components/bouncingdotsloader";
+import starIcon from "../assets/star-icon.svg";
+import memberImg from "../assets/members.svg";
 
 export default function HomePage() {
     const [active, setActive] = useState("glide-campus");
@@ -97,11 +99,12 @@ export default function HomePage() {
                 if (res.ok) {
                     setAwayResults(data.rides || []);
 
+
                 } else {
                     toast.error(data.message || "Failed to fetch away glides");
                 }
             } else {
-                alert(JSON.stringify(user))
+
                 if (!user) {
                     toast.error("You must be logged in to create an away glide");
                     return;
@@ -195,20 +198,20 @@ export default function HomePage() {
 
                     <div className="col-span-6 flex gap-10">
                         {active === "glide-campus" && (
-                            <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer hover:bg-white px-4">
+                            <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 transition-all duration-300 ease-in-out">
                                 <img className="rounded-full" src={coinImg} width="23px" />
-                                <p className="font-comfortaa text-[#9290C3] text-base font-semibold group-hover:text-[#070F2B]">
+                                <p className="font-comfortaa text-[#9290C3] text-base font-semibold ">
                                     {user?.glidePoints ?? 0}
                                 </p>
                             </div>
                         )}
-                        <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer hover:bg-white px-4">
+                        <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer  px-4">
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
-                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">Glide-History</p>
+                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold ">Glide-History</p>
                         </div>
-                        <div className="group flex items-center gap-2 p-2 hover:bg-white rounded-4xl cursor-pointer px-4">
+                        <div className="group flex items-center gap-2 p-2  rounded-4xl cursor-pointer px-4">
                             <img className="rounded-full" src={userImg} width="30px" />
-                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold group-hover:text-[#070F2B]">
+                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold ">
                                 Hello, {user?.name ?? "Lion"}
                             </p>
                         </div>
@@ -276,9 +279,9 @@ export default function HomePage() {
                                                     onChange={(e) => setCampusSource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                    <option value="">Select source</option>
+                                                    
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
-                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="Boys Hostel B-2">Boys Hostel B-2</option>
                                                     <option value="AB-2">AB-2</option>
                                                     <option value="AB-1">AB-1</option>
                                                     <option value="Girls Hostel B-2">Girls Hostel B-2</option>
@@ -448,14 +451,14 @@ export default function HomePage() {
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
-                                                >
-                                                    <option value="">Select Source</option>
-                                                    <option value="vit-highway">VIT Highway</option>
-                                                    <option value="bhopal">Bhopal</option>
-                                                    <option value="indore">Indore</option>
-                                                    <option value="rkmp">RKMP Railway Station</option>
-                                                    <option value="nadra-bus">Nadra Bus Stand</option>
-                                                    <option value="db-mall">DB Mall</option>
+                                                ><option value="">Select Destination</option>
+                                                    <option value="Bhopal">Bhopal</option>
+                                                    <option value="Indore">Indore</option>
+                                                    <option value="VIT Highway">VIT Highway</option>
+                                                    <option value="RKMP Railway Station">RKMP Railway Station</option>
+                                                    <option value="Nadra Bus Stand">Nadra Bus Stand</option>
+                                                    <option value="DB Mall">DB Mall</option>
+
                                                 </select>
                                             </div>
 
@@ -471,12 +474,12 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 ><option value="">Select Destination</option>
-                                                    <option value="vit-highway">VIT Highway</option>
-                                                    <option value="bhopal">Bhopal</option>
-                                                    <option value="indore">Indore</option>
-                                                    <option value="rkmp">RKMP Railway Station</option>
-                                                    <option value="nadra-bus">Nadra Bus Stand</option>
-                                                    <option value="db-mall">DB Mall</option>
+                                                    <option value="Bhopal">Bhopal</option>
+                                                    <option value="Indore">Indore</option>
+                                                    <option value="VIT Highway">VIT Highway</option>
+                                                    <option value="RKMP Railway Station">RKMP Railway Station</option>
+                                                    <option value="Nadra Bus Stand">Nadra Bus Stand</option>
+                                                    <option value="DB Mall">DB Mall</option>
                                                 </select>
                                             </div>
 
@@ -540,23 +543,44 @@ export default function HomePage() {
                                 {campusResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform  font-comfortaa cursor-pointer"
+                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-comfortaa cursor-pointer"
                                     >
-                                        <div className="flex flex-col gap-5">
 
-                                            <span className=" text-lg  w-max
-                                            ml-2 px-4 py-2 pt-3 rounded-lg justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30  tracking-wide">
+                                        {ride.creator?.tags?.length > 0 && (
+                                            <div
+                                                className="flex gap-2 absolute -top-3 left-6 
+      bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
+      text-xs font-medium shadow-md text-white 
+      justify-center items-center
+      transition-colors duration-300 ease-in-out 
+      group-hover:bg-[#6d72ff]"
+                                            >
+                                                <img src={starIcon} alt="star icon" width="15" height="15" />
+                                                <p className="text-xs">{ride.creator.tags[0]}</p>
+                                            </div>
+                                        )}
+
+
+
+
+                                        <div className="flex flex-col gap-5 mt-3">
+                                            <span
+                                                className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide"
+                                            >
                                                 {ride.source}
                                             </span>
 
-                                            <span className="px-3 py-1 rounded-xl  text-white text-lg font-medium w-max">
-                                                <span className="text-gray-400">Glide-owner:</span> {ride.creator?.name || "Unknown"}
+                                            <span className="px-3 py-1 text-sm rounded-xl text-white font-medium w-max">
+                                                <span className="text-gray-400">Glide-owner:</span>{" "}
+                                                {ride.creator?.name || "Unknown"}
                                             </span>
-                                            <button className="text-white text-lg bg-[#474a8f] px-5 p-3 rounded-xl cursor-pointer hover:bg-[#6d72ff] transition duration-300 font-comfortaa">
-                                               Book
+
+                                            <button className="text-white text-sm bg-[#474a8f] px-5 p-3 rounded-xl cursor-pointer hover:bg-[#6d72ff] transition duration-300 font-comfortaa">
+                                                Book
                                             </button>
                                         </div>
                                     </li>
+
 
                                 ))}
                             </ul>
@@ -587,36 +611,48 @@ export default function HomePage() {
                                 {awayResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="p-6 bg-white dark:bg-[#111827] border border-gray-200 dark:border-gray-700 rounded-2xl shadow-md hover:shadow-xl transition duration-300 transform hover:-translate-y-2 font-comfortaa"
+                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-comfortaa cursor-pointer"
+                                    >   <div
+                                        className="flex gap-2 absolute -top-3 left-6 
+    bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
+    text-xs font-medium shadow-md text-white 
+    justify-center items-center
+    transition-colors duration-300 ease-in-out 
+    group-hover:bg-[#6d72ff]"
                                     >
+                                            <img src={memberImg} alt="star icon" width="20" height="20" />
+                                            <p className="text-xs">{ride.memberCount} Members</p>
+                                        </div>
 
-                                        <div className="flex items-center justify-between mb-4">
-                                            <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+
+
+                                        <div className="flex items-center justify-between mb-4 mt-2">
+                                            <span className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
                                                 {ride.source}
                                             </span>
-                                            <span className="text-gray-500 dark:text-gray-400 text-sm font-semibold">
+                                            <span className="text-gray-500 dark:text-gray-400 text-4xl font-semibold">
                                                 ➝
                                             </span>
-                                            <span className="px-3 py-1 rounded-xl bg-[#474a8f] text-white text-base font-medium">
+                                            <span className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
                                                 {ride.destination}
                                             </span>
                                         </div>
 
-                                        <div className="space-y-2 text-gray-600 dark:text-gray-300 text-sm">
+                                        <div className="space-y-2 text-white  text-sm">
                                             <p>
-                                                <span className="font-semibold">Date:</span> {ride.date}
+                                                <span className="font-semibold text-gray-400">Date:</span> {ride.date}
                                             </p>
                                             <p>
-                                                <span className="font-semibold">Price:</span> ₹{ride.price}
+                                                <span className="font-semibold text-gray-400">Price:</span> ₹{ride.price}
                                             </p>
                                             <p>
-                                                <span className="font-semibold">Creator:</span>{" "}
+                                                <span className="font-semibold text-gray-400">Creator:</span>{" "}
                                                 {ride.creator?.name || "Unknown"}
                                             </p>
                                         </div>
 
                                         <button className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer">
-                                            Request Ride
+                                            Join Glide
                                         </button>
                                     </li>
                                 ))}

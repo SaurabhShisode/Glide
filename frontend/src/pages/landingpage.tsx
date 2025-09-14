@@ -37,7 +37,7 @@ export default function LandingPage() {
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
 
 
-            toast.success(`Logged in as ${res.data.user.email}`, {
+            toast.success(`Logged in as ${res.data.user.name}`, {
                 style: { background: '#14532d', color: 'white' },
                 onClose: () => navigate("/home"),
             });
