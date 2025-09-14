@@ -559,7 +559,7 @@ export default function HomePage() {
       transition-colors duration-300 ease-in-out 
       group-hover:bg-[#6d72ff]"
                                             >
-                                                <img src={starIcon} alt="star icon" width="15" height="15" />
+                                                <img src={starIcon} alt="star icon" width="20" height="20" />
                                                 <p className="text-xs">{ride.creator.tags[0]}</p>
                                             </div>
                                         )}
