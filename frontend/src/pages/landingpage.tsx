@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, } from "react";
+import type { FC } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
 import heroImage from "../assets/svgviewer-output.svg";
 import { motion, AnimatePresence } from "framer-motion";
-import { HighlightText } from '../components/animate-ui/text/highlight';
+import { HighlightText } from "../components/animate-ui/text/highlight";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
 
@@ -12,17 +13,41 @@ import { auth, googleProvider } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { Marquee } from "@/components/ui/marquee";
 
 export default function LandingPage() {
-    const [filterStatus, setFilterStatus] = useState<'glidecampus' | 'glideaway'>('glidecampus');
-    const [loginStatus, setLoginStatus] = useState<'yes' | 'no'>('no');
+    const [filterStatus, setFilterStatus] = useState<
+        "glidecampus" | "glideaway"
+    >("glidecampus");
+    const [loginStatus, setLoginStatus] = useState<"yes" | "no">("no");
     const [showSplash, setShowSplash] = useState(true);
-    const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+    const [authMode, setAuthMode] = useState<"login" | "register">("login");
     const navigate = useNavigate();
 
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+
+
+
+    const loopelements = [
+  { name: "Glide in campus with eco-friendly rides." },
+  { name: "Save money by sharing rides with classmates." },
+  { name: "Earn Glide Points and unlock cool badges." },
+  { name: "Find rides instantly from hostel to AB." },
+  { name: "Track your rides in real time for peace of mind." },
+  { name: "Join us in making campus travel smarter." },
+];
+
+const loopelementsRight = [
+  { name: "Plan your next outing with Glide." },
+  { name: "Coordinate group rides to RKMP." },
+  { name: "Chat with fellow students before your trip." },
+  { name: "Reduce your carbon footprint with shared rides." },
+  { name: "Glide Away for cheaper long-distance travel." },
+  { name: "Your commute, simplified with Glide." },
+];
+
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2000);
@@ -32,13 +57,15 @@ export default function LandingPage() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+            const res = await axios.post("http://localhost:5000/api/auth/login", {
+                email,
+                password,
+            });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
 
-
             toast.success(`Logged in as ${res.data.user.name}`, {
-                style: { background: '#14532d', color: 'white' },
+                style: { background: "#14532d", color: "white" },
                 onClose: () => navigate("/home"),
             });
         } catch (err: any) {
@@ -46,14 +73,16 @@ export default function LandingPage() {
         }
     };
 
-
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/register", { name, email, password });
+            const res = await axios.post("http://localhost:5000/api/auth/register", {
+                name,
+                email,
+                password,
+            });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
-
 
             toast.success("Registration successful!", {
                 onClose: () => navigate("/home"),
@@ -63,16 +92,16 @@ export default function LandingPage() {
         }
     };
 
-
     const handleGoogleLogin = async () => {
         try {
             const result = await signInWithPopup(auth, googleProvider);
             const idToken = await result.user.getIdToken();
 
-            const res = await axios.post("http://localhost:5000/api/auth/google", { idToken });
+            const res = await axios.post("http://localhost:5000/api/auth/google", {
+                idToken,
+            });
             localStorage.setItem("token", res.data.token);
             localStorage.setItem("glideUser", JSON.stringify(res.data.user));
-
 
             toast.success("Google login successful!", {
                 onClose: () => navigate("/home"),
@@ -100,7 +129,7 @@ export default function LandingPage() {
                                 width: "fit-content",
                                 WebkitTextStroke: "1px #9290C3",
                                 color: "transparent",
-                                transition: "color 0.8s ease, WebkitTextStroke 0.8s ease"
+                                transition: "color 0.8s ease, WebkitTextStroke 0.8s ease",
                             }}
                             initial={{ scale: 4 }}
                             animate={{ scale: 2, color: "#9290C3" }}
@@ -116,8 +145,6 @@ export default function LandingPage() {
             <div className="w-full min-h-screen bg-[#070F2B]">
                 <div className="flex items-center justify-center px-6">
                     <section className="flex flex-col md:flex-row items-center max-w-6xl gap-40 mt-20">
-
-
                         <motion.div
                             className="relative -ml-40 md:-ml-60 lg:-ml-100"
                             initial={{ opacity: 0, y: 150 }}
@@ -131,8 +158,7 @@ export default function LandingPage() {
                             />
                         </motion.div>
 
-
-                        {loginStatus === 'no' ? (
+                        {loginStatus === "no" ? (
                             <motion.div
                                 className="flex-1 text-center md:text-left px-7"
                                 initial={{ opacity: 0, y: 150 }}
@@ -142,19 +168,22 @@ export default function LandingPage() {
                                 <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight mb-2">
                                     Glide through your campus,<br />
                                 </h1>
-                                <HighlightText className="text-5xl md:text-6xl font-oswald text-white leading-tight " text="commute smarter." />
+                                <HighlightText
+                                    className="text-5xl md:text-6xl font-oswald text-white leading-tight "
+                                    text="commute smarter."
+                                />
                                 <p className="mt-6 text-lg font-comfortaa text-gray-300">
-                                    From hostel to academic block or to the Bhopal station - Glide connects students
-                                    for faster, cheaper, and eco-friendly rides.
+                                    From hostel to academic block or to the Bhopal station - Glide
+                                    connects students for faster, cheaper, and eco-friendly rides.
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
                                     <button
                                         className="cursor-pointer px-6 py-3 rounded-2xl bg-[#1B1A55] text-white font-semibold hover:bg-[#535C91] transition"
-                                        onClick={() => setLoginStatus('yes')}
+                                        onClick={() => setLoginStatus("yes")}
                                     >
                                         Get Started
                                     </button>
-                                    <button className="cursor-pointer px-6 py-3 rounded-2xl border border-white text-white font-semibold hover:bg-white hover:text-[#070F2B] transition">
+                                    <button className="cursor-pointer px-6 py-3 rounded-2xl border-1 border-white text-white font-semibold hover:bg-white hover:text-[#070F2B] transition">
                                         Learn More
                                     </button>
                                 </div>
@@ -229,10 +258,31 @@ export default function LandingPage() {
                                             Enter your credentials to create your account.
                                         </p>
                                         <form onSubmit={handleRegister} className="mt-8 flex flex-col gap-4">
-                                            <input type="text" placeholder="Name" className="p-3 rounded-md bg-gray-800 text-white" value={name} onChange={(e) => setName(e.target.value)} />
-                                            <input type="email" placeholder="VIT Email" className="p-3 rounded-md bg-gray-800 text-white" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                            <input type="password" placeholder="Password" className="p-3 rounded-md bg-gray-800 text-white" value={password} onChange={(e) => setPassword(e.target.value)} />
-                                            <button type="submit" className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition">
+                                            <input
+                                                type="text"
+                                                placeholder="Name"
+                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                value={name}
+                                                onChange={(e) => setName(e.target.value)}
+                                            />
+                                            <input
+                                                type="email"
+                                                placeholder="VIT Email"
+                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                value={email}
+                                                onChange={(e) => setEmail(e.target.value)}
+                                            />
+                                            <input
+                                                type="password"
+                                                placeholder="Password"
+                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                            />
+                                            <button
+                                                type="submit"
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition"
+                                            >
                                                 Register
                                             </button>
                                         </form>
@@ -253,29 +303,43 @@ export default function LandingPage() {
                     </section>
                 </div>
 
+                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-20">
+                    <Marquee pauseOnHover className="[--duration:50s]">
+                        {loopelements.map((review, ind) => (
+
+                            <ReviewCard key={ind} msg={review.name} />
+                        ))}
+                    </Marquee>
+                    <Marquee reverse pauseOnHover className="[--duration:50s]">
+                        {loopelementsRight.map((review, ind) => (
+                            <ReviewCard key={ind} msg={review.name} />
+                        ))}
+                    </Marquee>
+                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#070F2B]"></div>
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-[#070F2B]"></div>
+
+                </div>
 
                 <section className=" flex flex-col items-center justify-center px-6 mt-16 sm:mt-30 py-5 border-3 border-[#535C91] pt-5 rounded-3xl bg-[#04081b] mx-30">
-                    <div className=" mt-4 text-4xl font-poppins text-white text-center mb-8 tracking-wide">
+                    <div className=" mt-4 text-5xl font-oswald text-white text-center mb-8 tracking-wide">
                         How It Works
                     </div>
                     <div className="flex mb-2 gap-4 font-comfortaa items-center justify-center">
-                        {
-                            (['glidecampus', 'glideaway'] as const).map((type, idx) => (
-                                <button
-                                    key={idx}
-                                    onClick={() => setFilterStatus(type)}
-                                    className={`px-5 py-2 sm:px-6 sm:py-3 rounded-xl font-semibold text-base transition-all duration-300 shadow-md cursor-pointer ${filterStatus === type
-                                        ? "bg-[#535C91] text-white shadow-lg scale-105"
-                                        : "bg-[#1B1A55] text-gray-400 hover:text-white "
-                                        }`}
-                                >
-                                    {type === "glidecampus" ? "Glide-Campus" : "Glide-Away"}
-                                </button>
-                            ))
-                        }
+                        {(["glidecampus", "glideaway"] as const).map((type, idx) => (
+                            <button
+                                key={idx}
+                                onClick={() => setFilterStatus(type)}
+                                className={`px-4 py-2   rounded-lg font-semibold text-base transition-all duration-300 shadow-md cursor-pointer ${filterStatus === type
+                                    ? "bg-[#535C91] text-white shadow-lg scale-105"
+                                    : "bg-[#1B1A55] text-gray-400 hover:text-white "
+                                    }`}
+                            >
+                                {type === "glidecampus" ? "Glide-Campus" : "Glide-Away"}
+                            </button>
+                        ))}
                     </div>
                     <div className="relative w-full overflow-x-auto py-6">
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 px-4 sm:px-16  ">
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 px-4 sm:px-16     ">
                             {(filterStatus === "glidecampus"
                                 ? [
                                     "Open the app and see nearby campus rides",
@@ -296,9 +360,9 @@ export default function LandingPage() {
                                 >
                                     <div
                                         className="absolute -top-10 flex items-center justify-center h-20 w-20 rounded-full 
-               bg-gradient-to-tr from-[#6975c1] to-[#474a8f] text-white font-bold text-5xl 
-               shadow-lg font-oswald transition-colors duration-300 
-               group-hover:from-[#ff8a00] group-hover:to-[#ff4d4d]"
+            bg-gradient-to-tr from-[#6975c1] to-[#474a8f] text-white font-bold text-5xl 
+            shadow-lg font-oswald transition-colors duration-300 
+            group-hover:from-[#ff8a00] group-hover:to-[#ff4d4d]"
                                     >
                                         {index + 1}
                                     </div>
@@ -306,13 +370,13 @@ export default function LandingPage() {
                                         {step}
                                     </div>
                                 </div>
-
                             ))}
                         </div>
                     </div>
                 </section>
-                
-                < Footer />
+
+
+                <Footer />
             </div>
 
             <ToastContainer
@@ -325,7 +389,26 @@ export default function LandingPage() {
                 draggable
                 theme="dark"
             />
-
         </>
     );
 }
+
+
+type ReviewCardProps = {
+    msg: string;
+};
+
+const ReviewCard: FC<ReviewCardProps> = ({ msg }) => {
+    return (
+        <div
+            className="relative max-w-md mx-auto h-full  cursor-pointer overflow-hidden 
+             rounded-2xl border border-gray-50/[.1] bg-gray-50/[.10] p-6 
+             shadow-lg transition-all duration-300 hover:bg-gray-50/[.15] hover:shadow-xl"
+        >
+            <p className="text-white text-base leading-relaxed font-comfortaa">
+                {msg}
+            </p>
+        </div>
+
+    );
+};

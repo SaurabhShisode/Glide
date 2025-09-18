@@ -12,6 +12,8 @@ import BouncingDotsLoader from "@/components/bouncingdotsloader";
 import starIcon from "../assets/star-icon.svg";
 import memberImg from "../assets/members.svg";
 
+
+
 export default function HomePage() {
     const [active, setActive] = useState("glide-campus");
     const [campusTab, setCampusTab] = useState<"find" | "add">("find");
@@ -30,6 +32,7 @@ export default function HomePage() {
     const [awayResults, setAwayResults] = useState<any[]>([]);
 
     const [user, setUser] = useState<any>(null);
+    const [sortOption, setSortOption] = useState("newest");
 
 
     useEffect(() => {
@@ -62,7 +65,7 @@ export default function HomePage() {
                     return;
                 }
                 const payload = { source: campusSource, creator: user.id };
-                console.log(payload.creator);
+
                 const res = await fetch(`${API_BASE}/glide-campus`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -122,6 +125,7 @@ export default function HomePage() {
                     price: Number(awayPrice),
                     creator: user.id,
                 };
+
                 const res = await fetch(`${API_BASE}/glide-away`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -142,6 +146,58 @@ export default function HomePage() {
             setdisplayAwayRes(true);
         }
     };
+
+    const handleJoinAwayGlide = async (rideId: string) => {
+        try {
+            if (!user) {
+                toast.error("You must be logged in to join an away glide");
+                return;
+            }
+
+            setLoadingGlides(true);
+
+            const payload = { userId: user.id };
+
+            const res = await fetch(`${API_BASE}/glide-away/join/${rideId}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload),
+            });
+
+            const data = await res.json();
+            if (res.ok) {
+                toast.success("Joined away glide successfully");
+
+                setAwayResults((prev) =>
+                    prev.map((ride) =>
+                        ride._id === rideId ? { ...ride, members: [...ride.members, user] } : ride
+                    )
+                );
+            } else {
+                toast.error(data.message || "Failed to join away glide");
+            }
+        } catch (error) {
+            console.error("Error joining away glide:", error);
+            toast.error("Something went wrong");
+        } finally {
+            setLoadingGlides(false);
+        }
+    };
+    const getSortedGlides = () => {
+  return [...awayResults].sort((a, b) => {
+    if (sortOption === "newest") {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else if (sortOption === "price") {
+      return a.price - b.price; // ascending
+    } else if (sortOption === "members") {
+      return b.memberCount - a.memberCount; // descending
+    }
+    return 0;
+  });
+};
+
+const sortedAwayResults = getSortedGlides();
+
 
     return (
         <div className="w-full min-h-screen bg-[#070F2B]">
@@ -282,7 +338,7 @@ export default function HomePage() {
                                                     onChange={(e) => setCampusSource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                    
+
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
                                                     <option value="Boys Hostel B-2">Boys Hostel B-2</option>
                                                     <option value="AB-2">AB-2</option>
@@ -294,7 +350,7 @@ export default function HomePage() {
 
                                             <button
                                                 type="submit"
-                                                
+
                                                 className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
@@ -321,7 +377,7 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                    
+
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
                                                     <option value="AB-2">AB-2</option>
@@ -398,7 +454,7 @@ export default function HomePage() {
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-                                                   
+
                                                     <option value="VIT Highway">VIT Highway</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
@@ -454,7 +510,7 @@ export default function HomePage() {
 
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
-                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
+                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
                                                 >
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
@@ -476,7 +532,7 @@ export default function HomePage() {
                                                     value={awayDestination}
                                                     onChange={(e) => setAwayDestination(e.target.value)}
 
-                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
+                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
                                                 >
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
@@ -494,7 +550,7 @@ export default function HomePage() {
                                                     type="date"
                                                     value={awayDate}
                                                     onChange={(e) => setAwayDate(e.target.value)}
-                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
+                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
                                                 />
                                             </div>
 
@@ -506,7 +562,7 @@ export default function HomePage() {
                                                     value={awayPrice}
                                                     onChange={(e) => setAwayPrice(e.target.value)}
                                                     placeholder="Enter price"
-                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
+                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
                                                 />
                                             </div>
 
@@ -606,13 +662,24 @@ export default function HomePage() {
                 <div className="mx-40">
 
 
-                    {awayResults.length > 0 ? (
+                    {sortedAwayResults.length > 0 ? (
                         <div>
                             <h3 className="text-xl font-semibold text-white font-poppins mb-4">
                                 Available Away Glides
                             </h3>
-                            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {awayResults.map((ride, idx) => (
+                            < div className="flex justify-end mb-4">
+                                <select
+                                    value={sortOption}
+                                    onChange={(e) => setSortOption(e.target.value)}
+                                    className="px-3 py-2 rounded-lg bg-[#1f2937] text-white border border-gray-600"
+                                >
+                                    <option value="newest">Newest First</option>
+                                    <option value="price">Sort by Price</option>
+                                    <option value="members">Sort by Members</option>
+                                </select>
+                            </div>
+                            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+                                {sortedAwayResults.map((ride, idx) => (
                                     <li
                                         key={idx}
                                         className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-comfortaa cursor-pointer"
@@ -655,9 +722,13 @@ export default function HomePage() {
                                             </p>
                                         </div>
 
-                                        <button className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer">
+                                        <button
+                                            onClick={() => handleJoinAwayGlide(ride._id)}
+                                            className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer"
+                                        >
                                             Join Glide
                                         </button>
+
                                     </li>
                                 ))}
                             </ul>
