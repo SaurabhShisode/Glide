@@ -2,18 +2,18 @@ import { useEffect, useState, } from "react";
 import type { FC } from "react";
 import Navbar from "../components/navbar";
 import Footer from "../components/footer";
-import heroImage from "../assets/svgviewer-output.svg";
+import heroImage from "../assets/svgviewer-output (2).svg";
 import { motion, AnimatePresence } from "framer-motion";
 import { HighlightText } from "../components/animate-ui/text/highlight";
 import axios from "axios";
 import { FcGoogle } from "react-icons/fc";
-
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider } from "../firebase";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { Marquee } from "@/components/ui/marquee";
+import bracket from "../assets/bracket.svg";
 
 export default function LandingPage() {
     const [filterStatus, setFilterStatus] = useState<
@@ -31,22 +31,22 @@ export default function LandingPage() {
 
 
     const loopelements = [
-  { name: "Glide in campus with eco-friendly rides." },
-  { name: "Save money by sharing rides with classmates." },
-  { name: "Earn Glide Points and unlock cool badges." },
-  { name: "Find rides instantly from hostel to AB." },
-  { name: "Track your rides in real time for peace of mind." },
-  { name: "Join us in making campus travel smarter." },
-];
+        { name: "Glide in campus with eco-friendly rides." },
+        { name: "Save money by sharing rides with classmates." },
+        { name: "Earn Glide Points and unlock cool badges." },
+        { name: "Find rides instantly from hostel to AB." },
+        { name: "Track your rides in real time for peace of mind." },
+        { name: "Join us in making campus travel smarter." },
+    ];
 
-const loopelementsRight = [
-  { name: "Plan your next outing with Glide." },
-  { name: "Coordinate group rides to RKMP." },
-  { name: "Chat with fellow students before your trip." },
-  { name: "Reduce your carbon footprint with shared rides." },
-  { name: "Glide Away for cheaper long-distance travel." },
-  { name: "Your commute, simplified with Glide." },
-];
+    const loopelementsRight = [
+        { name: "Plan your next outing with Glide." },
+        { name: "Coordinate group rides to RKMP." },
+        { name: "Chat with fellow students before your trip." },
+        { name: "Reduce your carbon footprint with shared rides." },
+        { name: "Glide Away for cheaper long-distance travel." },
+        { name: "Your commute, simplified with Glide." },
+    ];
 
 
     useEffect(() => {
@@ -117,7 +117,7 @@ const loopelementsRight = [
             <AnimatePresence>
                 {showSplash && (
                     <motion.div
-                        className="fixed inset-0 flex items-center justify-center bg-[#070F2B] z-50"
+                        className="fixed inset-0 flex items-center justify-center bg-[#1a0734] z-50"
                         initial={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         transition={{ duration: 1 }}
@@ -142,11 +142,14 @@ const loopelementsRight = [
             </AnimatePresence>
 
             {!showSplash && <Navbar setLoginStatus={setLoginStatus} />}
-            <div className="w-full min-h-screen bg-[#070F2B]">
-                <div className="flex items-center justify-center px-6">
-                    <section className="flex flex-col md:flex-row items-center max-w-6xl gap-40 mt-20">
+            <div className="w-full  min-h-screen p-0 relativen bg-black">
+                <div className="flex items-center justify-center px-6 bg-gradient-to-b 
+  from-[#1a0734] from-0% 
+  via-[#2d085a] via-50%
+  to-[#682db1] to-100% ">
+                    <section className="flex flex-col md:flex-row items-center min-h-screen max-w-7xl gap-40 mt-[-5rem]">
                         <motion.div
-                            className="relative -ml-40 md:-ml-60 lg:-ml-100"
+                            className="relative -ml-40 md:-ml-60 lg:-ml-90"
                             initial={{ opacity: 0, y: 150 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut", delay: 2.5 }}
@@ -165,20 +168,20 @@ const loopelementsRight = [
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 2.5 }}
                             >
-                                <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight mb-2">
+                                <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight mb-2">
                                     Glide through your campus,<br />
                                 </h1>
                                 <HighlightText
-                                    className="text-5xl md:text-6xl font-oswald text-white leading-tight "
+                                    className="text-5xl md:text-7xl font-oswald text-white leading-tight mt-2"
                                     text="commute smarter."
                                 />
-                                <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                                <p className="mt-6 text-xl font-grotesk text-gray-300">
                                     From hostel to academic block or to the Bhopal station - Glide
                                     connects students for faster, cheaper, and eco-friendly rides.
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
                                     <button
-                                        className="cursor-pointer px-6 py-3 rounded-2xl bg-[#1B1A55] text-white font-semibold hover:bg-[#535C91] transition"
+                                        className="cursor-pointer px-6 py-3 rounded-2xl bg-[#330d6a] text-white font-semibold hover:bg-[#400e86] transition"
                                         onClick={() => setLoginStatus("yes")}
                                     >
                                         Get Started
@@ -186,7 +189,9 @@ const loopelementsRight = [
                                     <button className="cursor-pointer px-6 py-3 rounded-2xl border-1 border-white text-white font-semibold hover:bg-white hover:text-[#070F2B] transition">
                                         Learn More
                                     </button>
+
                                 </div>
+
                             </motion.div>
                         ) : (
                             <motion.div
@@ -196,31 +201,31 @@ const loopelementsRight = [
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                             >
                                 {authMode === "login" ? (
-                                    <>
-                                        <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
+                                    <div className=" px-14">
+                                        <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight">
                                             Welcome Back!<br />Please Log In.
                                         </h1>
-                                        <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                                        <p className="mt-6 text-xl font-comfortaa text-gray-300">
                                             Enter your credentials to access your account.
                                         </p>
                                         <form onSubmit={handleLogin} className="mt-8 flex flex-col gap-4">
                                             <input
                                                 type="email"
                                                 placeholder="VIT Email"
-                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                className="p-3 rounded-md bg-gray-700 text-white"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
                                             <input
                                                 type="password"
                                                 placeholder="Password"
-                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                className="p-3 rounded-md bg-gray-700 text-white"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition"
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
                                             >
                                                 Log In
                                             </button>
@@ -248,40 +253,40 @@ const loopelementsRight = [
                                                 Register
                                             </span>
                                         </p>
-                                    </>
+                                    </div>
                                 ) : (
-                                    <>
-                                        <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
-                                            Create an Account
+                                    <div className="px-16">
+                                        <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight">
+                                            Create your Account
                                         </h1>
-                                        <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                                        <p className="mt-6 text-xl font-comfortaa text-gray-300">
                                             Enter your credentials to create your account.
                                         </p>
                                         <form onSubmit={handleRegister} className="mt-8 flex flex-col gap-4">
                                             <input
                                                 type="text"
                                                 placeholder="Name"
-                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                className="p-3 rounded-md bg-gray-700 text-white"
                                                 value={name}
                                                 onChange={(e) => setName(e.target.value)}
                                             />
                                             <input
                                                 type="email"
                                                 placeholder="VIT Email"
-                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                className="p-3 rounded-md bg-gray-700 text-white"
                                                 value={email}
                                                 onChange={(e) => setEmail(e.target.value)}
                                             />
                                             <input
                                                 type="password"
                                                 placeholder="Password"
-                                                className="p-3 rounded-md bg-gray-800 text-white"
+                                                className="p-3 rounded-md bg-gray-700 text-white"
                                                 value={password}
                                                 onChange={(e) => setPassword(e.target.value)}
                                             />
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#535C91] text-white font-semibold hover:bg-[#7c81f3] transition"
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
                                             >
                                                 Register
                                             </button>
@@ -296,14 +301,14 @@ const loopelementsRight = [
                                                 Log In
                                             </span>
                                         </p>
-                                    </>
+                                    </div>
                                 )}
                             </motion.div>
                         )}
                     </section>
                 </div>
 
-                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden mt-20">
+                <div className="relative flex w-full flex-col items-center justify-center overflow-hidden my-5 bg-black">
                     <Marquee pauseOnHover className="[--duration:50s]">
                         {loopelements.map((review, ind) => (
 
@@ -315,12 +320,58 @@ const loopelementsRight = [
                             <ReviewCard key={ind} msg={review.name} />
                         ))}
                     </Marquee>
-                    <div className="pointer-events-none absolute inset-y-0 left-0 w-1/4 bg-gradient-to-r from-[#070F2B]"></div>
-                    <div className="pointer-events-none absolute inset-y-0 right-0 w-1/4 bg-gradient-to-l from-[#070F2B]"></div>
 
                 </div>
+                <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-10 items-center mx-20 mr-140">
+                    <div className="flex-1 ">
+                        <h1 className="text-5xl font-grotesk text-right">Glide-Campus</h1>
+                    </div>
+                    
+                    <div>
+                        <img src={bracket} width="80px" />
+                    </div>
+                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg font-gretosk">
+                        <p>Open the app and see nearby campus rides</p>
+                        <p>Request a ride or offer a ride</p>
+                        <p>Earn Glide Points and badges for each ride</p>
+                        <p>Track rides in real-time and connect safely</p>
+                    </div>
+                </section>
 
-                <section className=" flex flex-col items-center justify-center px-6 mt-16 sm:mt-30 py-5 border-3 border-[#535C91] pt-5 rounded-3xl bg-[#04081b] mx-30">
+                     <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-10 items-center mx-20 ml-140">
+                    
+                    
+                    
+                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk">
+                        <p>Create or join a long-distance trip</p>
+                        <p>Coordinate with other students in private chat</p>
+                        <p>Optimize timing based on train/flight schedule</p>
+                        <p>Share cab and reduce travel costs</p>
+                    </div>
+
+                    <div>
+                        <img src={bracket} width="80px" className="rotate-180"/>
+                    </div>
+
+                    <div className="flex-1 ">
+                        <h1 className="text-5xl font-grotesk ">Glide-Away</h1>
+                    </div>
+                </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                {/*<section className=" flex flex-col items-center justify-center px-6 mt-16 sm:mt-30 py-5 border-3 border-[#535C91] pt-5 rounded-3xl bg-[#04081b] mx-30">
                     <div className=" mt-4 text-5xl font-oswald text-white text-center mb-8 tracking-wide">
                         How It Works
                     </div>
@@ -374,6 +425,7 @@ const loopelementsRight = [
                         </div>
                     </div>
                 </section>
+                */}
 
 
                 <Footer />
@@ -405,7 +457,7 @@ const ReviewCard: FC<ReviewCardProps> = ({ msg }) => {
              rounded-2xl border border-gray-50/[.1] bg-gray-50/[.10] p-6 
              shadow-lg transition-all duration-300 hover:bg-gray-50/[.15] hover:shadow-xl"
         >
-            <p className="text-white text-base leading-relaxed font-comfortaa">
+            <p className="text-white text-base leading-relaxed font-grotesk">
                 {msg}
             </p>
         </div>

@@ -52,7 +52,7 @@ function HighlightText({
     delay: 2.6, 
   }}
       style={{
-        backgroundImage: "linear-gradient(120deg, #535C91 0%, #7c81f3 100%)",
+        backgroundImage: "linear-gradient(120deg,   #9a5fec 0%, #6f1be4 100%)",
         backgroundRepeat: "no-repeat",
         backgroundPosition: "0 90%",
         display: "inline-flex",

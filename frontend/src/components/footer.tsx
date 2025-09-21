@@ -9,7 +9,7 @@ import GitHubIcon from '../assets/icons/github.svg';
 
 const Footer = () => {
   return (
-    <footer className=" text-[#9290C3] py-16 sm:py-24 px-4 sm:px-6 md:px-20 mt-20">
+    <footer className=" text-[#9290C3] py-16 sm:py-24 px-4 sm:px-6 md:px-20  ">
       <div className="max-w-7xl mx-10 sm:mx-auto grid grid-cols-2 sm:grid-cols-2 md:grid-cols-4 gap-10 sm:gap-12">
 
 

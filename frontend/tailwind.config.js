@@ -8,6 +8,7 @@ export default {
         raleway: ["Raleway", "sans-serif"],
         oswald: ["Oswald", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
+        grotesk: ["Grotesk", "sans-serif"],
       },
       keyframes: {
         scrollLeft: {
