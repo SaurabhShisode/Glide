@@ -330,7 +330,7 @@ export default function LandingPage() {
                     <div>
                         <img src={bracket} width="80px" />
                     </div>
-                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg font-gretosk">
+                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg">
                         <p>Open the app and see nearby campus rides</p>
                         <p>Request a ride or offer a ride</p>
                         <p>Earn Glide Points and badges for each ride</p>
