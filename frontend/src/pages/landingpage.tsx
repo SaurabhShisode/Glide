@@ -16,9 +16,7 @@ import { Marquee } from "@/components/ui/marquee";
 import bracket from "../assets/bracket.svg";
 
 export default function LandingPage() {
-    const [filterStatus, setFilterStatus] = useState<
-        "glidecampus" | "glideaway"
-    >("glidecampus");
+
     const [loginStatus, setLoginStatus] = useState<"yes" | "no">("no");
     const [showSplash, setShowSplash] = useState(true);
     const [authMode, setAuthMode] = useState<"login" | "register">("login");
@@ -330,7 +328,7 @@ export default function LandingPage() {
                     <div>
                         <img src={bracket} width="80px" />
                     </div>
-                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg">
+                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg text-gray-400">
                         <p>Open the app and see nearby campus rides</p>
                         <p>Request a ride or offer a ride</p>
                         <p>Earn Glide Points and badges for each ride</p>
@@ -342,7 +340,7 @@ export default function LandingPage() {
                     
                     
                     
-                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk">
+                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk text-gray-400">
                         <p>Create or join a long-distance trip</p>
                         <p>Coordinate with other students in private chat</p>
                         <p>Optimize timing based on train/flight schedule</p>
@@ -371,61 +369,7 @@ export default function LandingPage() {
 
 
 
-                {/*<section className=" flex flex-col items-center justify-center px-6 mt-16 sm:mt-30 py-5 border-3 border-[#535C91] pt-5 rounded-3xl bg-[#04081b] mx-30">
-                    <div className=" mt-4 text-5xl font-oswald text-white text-center mb-8 tracking-wide">
-                        How It Works
-                    </div>
-                    <div className="flex mb-2 gap-4 font-comfortaa items-center justify-center">
-                        {(["glidecampus", "glideaway"] as const).map((type, idx) => (
-                            <button
-                                key={idx}
-                                onClick={() => setFilterStatus(type)}
-                                className={`px-4 py-2   rounded-lg font-semibold text-base transition-all duration-300 shadow-md cursor-pointer ${filterStatus === type
-                                    ? "bg-[#535C91] text-white shadow-lg scale-105"
-                                    : "bg-[#1B1A55] text-gray-400 hover:text-white "
-                                    }`}
-                            >
-                                {type === "glidecampus" ? "Glide-Campus" : "Glide-Away"}
-                            </button>
-                        ))}
-                    </div>
-                    <div className="relative w-full overflow-x-auto py-6">
-                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 px-4 sm:px-16     ">
-                            {(filterStatus === "glidecampus"
-                                ? [
-                                    "Open the app and see nearby campus rides",
-                                    "Request a ride or offer a ride",
-                                    "Earn Glide Points and badges for each ride",
-                                    "Track rides in real-time and connect safely",
-                                ]
-                                : [
-                                    "Create or join a long-distance trip",
-                                    "Coordinate with other students in private chat",
-                                    "Optimize timing based on train/flight schedule",
-                                    "Share cab and reduce travel costs",
-                                ]
-                            ).map((step, index) => (
-                                <div
-                                    key={index}
-                                    className="group relative flex flex-col items-center min-w-[220px] bg-[#1B1A55] rounded-3xl py-14 px-8 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 mt-10 min-h-[250px] justify-between"
-                                >
-                                    <div
-                                        className="absolute -top-10 flex items-center justify-center h-20 w-20 rounded-full 
-            bg-gradient-to-tr from-[#6975c1] to-[#474a8f] text-white font-bold text-5xl 
-            shadow-lg font-oswald transition-colors duration-300 
-            group-hover:from-[#ff8a00] group-hover:to-[#ff4d4d]"
-                                    >
-                                        {index + 1}
-                                    </div>
-                                    <div className="text-white text-center text-lg font-poppins mt-6">
-                                        {step}
-                                    </div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                </section>
-                */}
+                
 
 
                 <Footer />
