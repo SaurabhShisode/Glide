@@ -365,32 +365,32 @@ export default function LandingPage() {
                 </section>
 
                 <section className="mt-10">
-                    <div className="px-60 flex flex-col md:flex-row gap-6 md:gap-10 justify-center items-center bg-gray-50/[.10] border-t border-b border-gray-50/[.1]">
+                    <div className="px-10 md:px-60 flex flex-col md:flex-row gap-3 md:gap-10 justify-center items-center bg-gray-50/[.10] border-t border-b border-gray-50/[.1]">
 
-                        <div className="flex-1 p-6 rounded-2xl text-center">
-                            <p className="text-white text-lg font-grotesk">Total Users</p>
+                        <div className="flex-1 p-3 md:p-6 rounded-2xl text-center">
+                            <p className="text-white text-md md:text-lg font-grotesk">Total Users</p>
                             <p className="text-white text-4xl font-bold mt-2 font-grotesk">500+</p>
                         </div>
 
-                        <div className="flex-1 p-6 rounded-2xl text-center">
-                            <p className="text-white text-lg font-grotesk">Total Glides</p>
+                        <div className="flex-1 p-3 md:p-6 rounded-2xl text-center">
+                            <p className="text-white text-md md:text-lg font-grotesk">Total Glides</p>
                             <p className="text-white text-4xl font-bold mt-2 font-grotesk">1200+</p>
                         </div>
 
-                        <div className="flex-1 p-6 rounded-2xl text-center">
-                            <p className="text-white text-lg font-grotesk">Active Gliders</p>
+                        <div className="flex-1 p-3 md:p-6 rounded-2xl text-center">
+                            <p className="text-white text-md md:text-lg font-grotesk">Active Gliders</p>
                             <p className="text-white text-4xl font-bold mt-2 font-grotesk">350+</p>
                         </div>
 
                     </div>
                 </section>
 
-                <section className="mt-20 ">
+                <section className="mt-10 md:mt-20 mx-10 sm:mx-0">
                     <div>
-                        <p className="text-white font-grotesk text-5xl text-center">
-                            <span className="text-8xl">“</span>Why walk when you can glide… and brag about it?<span className="text-8xl">”</span>
+                        <p className="text-white font-grotesk text-xl md:text-5xl text-center">
+                            <span className=" text-3xl md:text-8xl">“</span>Why walk when you can glide… and brag about it?<span className="text-3xl md:text-8xl">”</span>
                         </p>
-                        <p className="text-gray-400 font-grotesk text-2xl text-center">- Someone who hates walking.</p>
+                        <p className="text-gray-400 font-grotesk text-md md:text-2xl text-center">- Someone who hates walking.</p>
                     </div>
 
                 </section>
