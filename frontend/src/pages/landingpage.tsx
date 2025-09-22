@@ -111,7 +111,7 @@ export default function LandingPage() {
 
 
     return (
-        <>
+        <div className="overflow-hidden">
             <AnimatePresence>
                 {showSplash && (
                     <motion.div
@@ -145,7 +145,7 @@ export default function LandingPage() {
   from-[#1a0734] from-0% 
   via-[#2d085a] via-50%
   to-[#682db1] to-100% ">
-                    <section className="flex flex-col md:flex-row items-center min-h-screen max-w-7xl gap-40 mt-[-5rem]">
+                    <section className="flex flex-col md:flex-row items-center min-h-screen max-w-7xl gap-10 md:gap-40 md:mt-[-5rem]">
                         <motion.div
                             className="relative -ml-40 md:-ml-60 lg:-ml-90"
                             initial={{ opacity: 0, y: 150 }}
@@ -166,20 +166,20 @@ export default function LandingPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 2.5 }}
                             >
-                                <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight mb-2">
+                                <h1 className="text-4xl md:text-7xl font-oswald text-white leading-tight mb-2">
                                     Glide through your campus,<br />
                                 </h1>
                                 <HighlightText
-                                    className="text-5xl md:text-7xl font-oswald text-white leading-tight mt-2"
+                                    className="text-4xl md:text-7xl font-oswald text-white leading-tight mt-2"
                                     text="commute smarter."
                                 />
-                                <p className="mt-6 text-xl font-grotesk text-gray-300">
+                                <p className="mt-6 text-lg md:text-xl font-grotesk text-gray-300">
                                     From hostel to academic block or to the Bhopal station - Glide
                                     connects students for faster, cheaper, and eco-friendly rides.
                                 </p>
                                 <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
                                     <button
-                                        className="cursor-pointer px-6 py-3 rounded-2xl bg-[#330d6a] text-white font-semibold hover:bg-[#400e86] transition"
+                                        className="cursor-pointer px-6 py-3 rounded-2xl bg-[#330d6a] text-white font-semibold hover:bg-[#400e86] transition "
                                         onClick={() => setLoginStatus("yes")}
                                     >
                                         Get Started
@@ -320,15 +320,23 @@ export default function LandingPage() {
                     </Marquee>
 
                 </div>
-                <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-10 items-center mx-20 mr-140">
+                <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-4 md:gap-10 items-center mx-10 md:mx-20 md:mr-140 ">
                     <div className="flex-1 ">
-                        <h1 className="text-5xl font-grotesk text-right">Glide-Campus</h1>
+                        <h1 className="text-3xl md:text-5xl font-grotesk text-right">Glide-Campus</h1>
                     </div>
-                    
-                    <div>
-                        <img src={bracket} width="80px" />
+
+                    <div className="flex justify-center md:block leading-none">
+                        <img
+                            src={bracket}
+                            className="w-16 md:w-[80px] rotate-90 md:rotate-0 inline-block align-middle"
+                            alt="bracket"
+                        />
                     </div>
-                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg text-gray-400">
+
+
+
+
+                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg text-gray-400">
                         <p>Open the app and see nearby campus rides</p>
                         <p>Request a ride or offer a ride</p>
                         <p>Earn Glide Points and badges for each ride</p>
@@ -336,11 +344,11 @@ export default function LandingPage() {
                     </div>
                 </section>
 
-                     <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-10 items-center mx-20 ml-140">
-                    
-                    
-                    
-                    <div className="flex flex-col gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk text-gray-400">
+                <section className="bg-black text-white p-10  flex flex-col md:flex-row gap-4 md:gap-10 items-center mx-10 md:mx-20 md:ml-140">
+
+
+
+                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk text-gray-400">
                         <p>Create or join a long-distance trip</p>
                         <p>Coordinate with other students in private chat</p>
                         <p>Optimize timing based on train/flight schedule</p>
@@ -348,11 +356,12 @@ export default function LandingPage() {
                     </div>
 
                     <div>
-                        <img src={bracket} width="80px" className="rotate-180"/>
+
+                        <img src={bracket} width="80px" className="rotate-270 md:rotate-180 w-16 md:w-[80px] " />
                     </div>
 
                     <div className="flex-1 ">
-                        <h1 className="text-5xl font-grotesk ">Glide-Away</h1>
+                        <h1 className="text-3xl md:text-5xl font-grotesk ">Glide-Away</h1>
                     </div>
                 </section>
 
@@ -369,7 +378,7 @@ export default function LandingPage() {
 
 
 
-                
+
 
 
                 <Footer />
@@ -385,7 +394,7 @@ export default function LandingPage() {
                 draggable
                 theme="dark"
             />
-        </>
+        </div>
     );
 }
 
