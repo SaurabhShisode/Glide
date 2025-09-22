@@ -147,7 +147,7 @@ export default function LandingPage() {
   to-[#682db1] to-100% ">
                     <section className="flex flex-col md:flex-row items-center min-h-screen max-w-7xl gap-10 md:gap-40 md:mt-[-5rem]">
                         <motion.div
-                            className="relative -ml-40 md:-ml-60 lg:-ml-90"
+                            className="relative -ml-40 md:-ml-60 lg:-ml-85"
                             initial={{ opacity: 0, y: 150 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.8, ease: "easeOut", delay: 2.5 }}
@@ -155,7 +155,7 @@ export default function LandingPage() {
                             <img
                                 src={heroImage}
                                 alt="Glide Hero"
-                                className="w-[500px] md:w-[700px] lg:w-[900px] object-contain mt-10 fit-content"
+                                className="w-[400px] md:w-[700px] lg:w-[900px] object-contain mt-10 fit-content"
                             />
                         </motion.div>
 
@@ -173,11 +173,11 @@ export default function LandingPage() {
                                     className="text-4xl md:text-7xl font-oswald text-white leading-tight mt-2"
                                     text="commute smarter."
                                 />
-                                <p className="mt-6 text-lg md:text-xl font-grotesk text-gray-300">
+                                <p className="mt-6 text-md md:text-xl font-grotesk text-gray-300">
                                     From hostel to academic block or to the Bhopal station - Glide
                                     connects students for faster, cheaper, and eco-friendly rides.
                                 </p>
-                                <div className="mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
+                                <div className="mt-4 md:mt-8 flex flex-col sm:flex-row gap-4 md:justify-start justify-center">
                                     <button
                                         className="cursor-pointer px-6 py-3 rounded-2xl bg-[#330d6a] text-white font-semibold hover:bg-[#400e86] transition "
                                         onClick={() => setLoginStatus("yes")}
@@ -199,14 +199,14 @@ export default function LandingPage() {
                                 transition={{ duration: 0.8, ease: "easeOut", delay: 0.2 }}
                             >
                                 {authMode === "login" ? (
-                                    <div className=" px-14">
-                                        <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight">
+                                    <div className="px-5 md:px-14">
+                                        <h1 className="text-4xl md:text-7xl font-oswald text-white leading-tight">
                                             Welcome Back!<br />Please Log In.
                                         </h1>
-                                        <p className="mt-6 text-xl font-comfortaa text-gray-300">
+                                        <p className="mt-3 md:mt-6 text-sm md:text-xl font-grotesk text-gray-300">
                                             Enter your credentials to access your account.
                                         </p>
-                                        <form onSubmit={handleLogin} className="mt-8 flex flex-col gap-4">
+                                        <form onSubmit={handleLogin} className="mt-4 md:mt-8 flex flex-col gap-4">
                                             <input
                                                 type="email"
                                                 placeholder="VIT Email"
@@ -242,7 +242,7 @@ export default function LandingPage() {
                                             </button>
                                         </div>
 
-                                        <p className="mt-4 text-gray-400 text-sm text-center">
+                                        <p className="mt-4 text-white text-sm text-center">
                                             Don’t have an account?{" "}
                                             <span
                                                 className="text-[#7c81f3] cursor-pointer hover:underline"
@@ -253,14 +253,14 @@ export default function LandingPage() {
                                         </p>
                                     </div>
                                 ) : (
-                                    <div className="px-16">
-                                        <h1 className="text-5xl md:text-7xl font-oswald text-white leading-tight">
+                                    <div className="px-5 md:px-16">
+                                        <h1 className="text-4xl md:text-7xl font-oswald text-white leading-tight">
                                             Create your Account
                                         </h1>
-                                        <p className="mt-6 text-xl font-comfortaa text-gray-300">
+                                        <p className="mt-3 md:mt-6 text-sm md:text-xl font-grotesk text-gray-300">
                                             Enter your credentials to create your account.
                                         </p>
-                                        <form onSubmit={handleRegister} className="mt-8 flex flex-col gap-4">
+                                        <form onSubmit={handleRegister} className="mt-4 md:mt-8 flex flex-col gap-4">
                                             <input
                                                 type="text"
                                                 placeholder="Name"
@@ -290,7 +290,7 @@ export default function LandingPage() {
                                             </button>
                                         </form>
 
-                                        <p className="text-center mt-4 text-gray-400 text-sm">
+                                        <p className="text-center mt-4 text-white text-sm">
                                             Already have an account?{" "}
                                             <span
                                                 className="text-[#7c81f3] cursor-pointer hover:underline"
@@ -320,23 +320,22 @@ export default function LandingPage() {
                     </Marquee>
 
                 </div>
-                <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-4 md:gap-10 items-center mx-10 md:mx-20 md:mr-140 ">
-                    <div className="flex-1 ">
-                        <h1 className="text-3xl md:text-5xl font-grotesk text-right">Glide-Campus</h1>
+                <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-4 md:gap-10 items-center mx-10 md:mx-20 md:mr-140">
+                    <div className="flex-1">
+                        <h1 className="text-3xl md:text-5xl font-grotesk text-right">
+                            Glide-Campus
+                        </h1>
                     </div>
 
-                    <div className="flex justify-center md:block leading-none">
+                    <div className="flex justify-center items-center">
                         <img
                             src={bracket}
-                            className="w-16 md:w-[80px] rotate-90 md:rotate-0 inline-block align-middle"
+                            className="w-16 md:w-[80px] rotate-90 md:rotate-0"
                             alt="bracket"
                         />
                     </div>
 
-
-
-
-                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg text-gray-400">
+                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pl-10 text-center md:text-left font-grotesk text-lg text-white">
                         <p>Open the app and see nearby campus rides</p>
                         <p>Request a ride or offer a ride</p>
                         <p>Earn Glide Points and badges for each ride</p>
@@ -348,7 +347,7 @@ export default function LandingPage() {
 
 
 
-                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk text-gray-400">
+                    <div className="flex flex-col gap-4 md:gap-8 pt-4 md:pt-0 md:pr-10 text-center md:text-right font-grotesk text-lg font-gretosk text-white">
                         <p>Create or join a long-distance trip</p>
                         <p>Coordinate with other students in private chat</p>
                         <p>Optimize timing based on train/flight schedule</p>
@@ -363,6 +362,37 @@ export default function LandingPage() {
                     <div className="flex-1 ">
                         <h1 className="text-3xl md:text-5xl font-grotesk ">Glide-Away</h1>
                     </div>
+                </section>
+
+                <section className="mt-10">
+                    <div className="px-60 flex flex-col md:flex-row gap-6 md:gap-10 justify-center items-center bg-gray-50/[.10] border-t border-b border-gray-50/[.1]">
+
+                        <div className="flex-1 p-6 rounded-2xl text-center">
+                            <p className="text-white text-lg font-grotesk">Total Users</p>
+                            <p className="text-white text-4xl font-bold mt-2 font-grotesk">500+</p>
+                        </div>
+
+                        <div className="flex-1 p-6 rounded-2xl text-center">
+                            <p className="text-white text-lg font-grotesk">Total Glides</p>
+                            <p className="text-white text-4xl font-bold mt-2 font-grotesk">1200+</p>
+                        </div>
+
+                        <div className="flex-1 p-6 rounded-2xl text-center">
+                            <p className="text-white text-lg font-grotesk">Active Gliders</p>
+                            <p className="text-white text-4xl font-bold mt-2 font-grotesk">350+</p>
+                        </div>
+
+                    </div>
+                </section>
+
+                <section className="mt-20 ">
+                    <div>
+                        <p className="text-white font-grotesk text-5xl text-center">
+                            <span className="text-8xl">“</span>Why walk when you can glide… and brag about it?<span className="text-8xl">”</span>
+                        </p>
+                        <p className="text-gray-400 font-grotesk text-2xl text-center">- Someone who hates walking.</p>
+                    </div>
+
                 </section>
 
 
