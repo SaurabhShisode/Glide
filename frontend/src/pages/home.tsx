@@ -200,9 +200,12 @@ const sortedAwayResults = getSortedGlides();
 
 
     return (
-        <div className="w-full min-h-screen bg-[#070F2B]">
+        <div className="w-full min-h-screen bg-gradient-to-b 
+  from-[#1a0734] from-0% 
+  via-[#2d085a] via-50%
+  to-[#682db1] to-100%">
 
-            <nav className="fixed w-full left-0 z-50 pt-5 pb-2 bg-[#0b1437] shadow-2xl">
+            <nav className="fixed w-full left-0 z-50 pt-5 pb-2 bg-[#1a0734] shadow-2xl">
                 <div className="grid grid-cols-12 mx-5 px-6 lg:px-6 items-center gap-10 h-16">
 
                     <div className="col-span-3">
@@ -217,7 +220,7 @@ const sortedAwayResults = getSortedGlides();
 
 
                     <div className="col-span-3">
-                        <ul className="hidden md:flex gap-8 font-comfortaa text-[#9290C3] font-medium">
+                        <ul className="hidden md:flex gap-8 font-grotesk text-[#9290C3] text-lg ">
 
                             <li
                                 className="relative group cursor-pointer transition"
@@ -258,19 +261,19 @@ const sortedAwayResults = getSortedGlides();
                     <div className="col-span-6 flex gap-10">
                         {active === "glide-campus" && (
                             <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 transition-all duration-300 ease-in-out">
-                                <img className="rounded-full" src={coinImg} width="23px" />
-                                <p className="font-comfortaa text-[#9290C3] text-base font-semibold ">
+                                <img className="rounded-full" src={coinImg} width="20px" />
+                                <p className="font-grotesk text-white text-lg font-semibold ">
                                     {user?.glidePoints ?? 0}
                                 </p>
                             </div>
                         )}
                         <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer  px-4">
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
-                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold ">Glide-History</p>
+                            <p className="font-grotesk text-white text-lg  ">Glide-History</p>
                         </div>
                         <div className="group flex items-center gap-2 p-2  rounded-4xl cursor-pointer px-4">
                             <img className="rounded-full" src={userImg} width="30px" />
-                            <p className="font-comfortaa text-[#9290C3] text-sm font-semibold ">
+                            <p className="font-grotesk text-white text-lg ">
                                 Hello, {user?.name ?? "Lion"}
                             </p>
                         </div>
@@ -286,19 +289,19 @@ const sortedAwayResults = getSortedGlides();
                 <section className="relative max-w-4xl pt-60 items-center mx-auto rounded-3xl mb-20">
                     {active === "glide-campus" ? (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
-                            <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
+                            <h1 className="text-5xl md:text-6xl font-grotesk text-white leading-tight">
                                 Glide Through Campus
                             </h1>
-                            <p className="mt-6 text-lg font-comfortaa text-gray-300">
+                            <p className="mt-2 text-lg font-grotesk text-gray-300">
                                 Switch between finding or adding a campus glide
                             </p>
 
 
-                            <div className="mt-8 flex gap-4 ">
+                            <div className="mt-4 flex gap-4 ">
                                 <button
                                     onClick={() => setCampusTab("find")}
-                                    className={`justify-center flex px-4 py-2 rounded-xl font-comfortaa transition cursor-pointer items-center gap-2 ${campusTab === "find"
-                                        ? "bg-[#6975c1] text-white"
+                                    className={`justify-center flex px-4 py-2 rounded-xl font-grotesk transition cursor-pointer items-center gap-2 ${campusTab === "find"
+                                        ? "bg-[#682db1] text-white"
                                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                         }`}
                                 >
@@ -307,8 +310,8 @@ const sortedAwayResults = getSortedGlides();
                                 </button>
                                 <button
                                     onClick={() => setCampusTab("add")}
-                                    className={`justify-center flex px-4 py-2 rounded-xl font-comfortaa transition cursor-pointer items-center gap-2 ${campusTab === "add"
-                                        ? "bg-[#6975c1] text-white"
+                                    className={`justify-center flex px-4 py-2 rounded-xl font-grotesk transition cursor-pointer items-center gap-2 ${campusTab === "add"
+                                        ? "bg-[#682db1] text-white"
                                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                         }`}
                                 ><img src={addImg} width="18px"></img>
@@ -330,7 +333,7 @@ const sortedAwayResults = getSortedGlides();
                                             className="flex flex-col gap-6"
                                         >
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Source Point
                                                 </label>
                                                 <select
@@ -351,7 +354,8 @@ const sortedAwayResults = getSortedGlides();
                                             <button
                                                 type="submit"
 
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl  text-white font-bold text-lg bg-[#682db1] 
+                                                hover:bg-[#943cff] font-grotesk hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
                                             </button>
@@ -367,7 +371,7 @@ const sortedAwayResults = getSortedGlides();
                                             className="flex flex-col gap-6"
                                         >
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Source Point
                                                 </label>
                                                 <select
@@ -389,7 +393,8 @@ const sortedAwayResults = getSortedGlides();
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl  text-white font-bold text-lg bg-[#682db1] 
+                                                hover:bg-[#943cff] font-grotesk hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Add New Glide
                                             </button>
@@ -400,19 +405,19 @@ const sortedAwayResults = getSortedGlides();
                         </div>
                     ) : (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
-                            <h1 className="text-5xl md:text-6xl font-oswald text-white leading-tight">
+                            <h1 className="text-5xl md:text-6xl font-grotesk text-white leading-tight">
                                 Glide Away From Campus
                             </h1>
-                            <p className="mt-6 text-lg font-comfortaa text-gray-300">
-                                Switch between finding or adding an away glide 🚐
+                            <p className="mt-2 text-lg font-grotesk text-gray-300">
+                                Switch between finding or adding an away glide
                             </p>
 
 
-                            <div className="mt-8 flex gap-4">
+                            <div className="mt-4 flex gap-4">
                                 <button
                                     onClick={() => setAwayTab("find")}
-                                    className={`flex justify-center gap-2 px-4 py-2 rounded-xl font-comfortaa transition cursor-pointer ${awayTab === "find"
-                                        ? "bg-[#6975c1] text-white"
+                                    className={`flex justify-center gap-2 px-4 py-2 rounded-xl font-grotesk transition cursor-pointer ${awayTab === "find"
+                                        ? "bg-[#682db1] text-white"
                                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                         }`}
                                 ><img src={findImg} width="18px"></img>
@@ -420,8 +425,8 @@ const sortedAwayResults = getSortedGlides();
                                 </button>
                                 <button
                                     onClick={() => setAwayTab("add")}
-                                    className={`flex justify-center gap-2  px-4 py-2 rounded-xl font-comfortaa transition cursor-pointer ${awayTab === "add"
-                                        ? "bg-[#6975c1] text-white"
+                                    className={`flex justify-center gap-2  px-4 py-2 rounded-xl font-grotesk transition cursor-pointer ${awayTab === "add"
+                                        ? "bg-[#682db1] text-white"
                                         : "bg-gray-700 text-gray-300 hover:bg-gray-600"
                                         }`}
                                 ><img src={addImg} width="18px"></img>
@@ -444,7 +449,7 @@ const sortedAwayResults = getSortedGlides();
                                         >
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Source Point
                                                 </label>
                                                 <select
@@ -465,7 +470,7 @@ const sortedAwayResults = getSortedGlides();
                                             </div>
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Destination Point
                                                 </label>
                                                 <select
@@ -486,7 +491,8 @@ const sortedAwayResults = getSortedGlides();
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white font-bold text-lg hover:bg-[#6d72ff] font-comfortaa hover:shadow-2xl transition-all duration-300"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl  text-white font-bold text-lg bg-[#682db1] 
+                                                hover:bg-[#943cff] font-grotesk hover:shadow-2xl transition-all duration-300"
                                             >
                                                 Find My Glide
                                             </button>
@@ -503,7 +509,7 @@ const sortedAwayResults = getSortedGlides();
                                         >
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Source Point
                                                 </label>
                                                 <select
@@ -524,7 +530,7 @@ const sortedAwayResults = getSortedGlides();
 
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">
+                                                <label className="text-gray-300 font-grotesk mb-2">
                                                     Destination Point
                                                 </label>
                                                 <select
@@ -545,7 +551,7 @@ const sortedAwayResults = getSortedGlides();
 
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">Date</label>
+                                                <label className="text-gray-300 font-grotesk mb-2">Date</label>
                                                 <input
                                                     type="date"
                                                     value={awayDate}
@@ -556,7 +562,7 @@ const sortedAwayResults = getSortedGlides();
 
 
                                             <div className="flex flex-col">
-                                                <label className="text-gray-300 font-comfortaa mb-2">Price</label>
+                                                <label className="text-gray-300 font-grotesk mb-2">Price</label>
                                                 <input
                                                     type="number"
                                                     value={awayPrice}
@@ -568,7 +574,8 @@ const sortedAwayResults = getSortedGlides();
 
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl bg-[#474a8f] text-white  text-lg hover:bg-[#6d72ff] hover:shadow-2xl font-bold transition-all duration-300 font-comfortaa"
+                                                className="cursor-pointer mt-8 px-8 py-4 rounded-2xl  text-white  text-lg bg-[#682db1] 
+                                                hover:bg-[#943cff] hover:shadow-2xl font-bold transition-all duration-300 font-grotesk"
                                             >
                                                 Add New Glide
                                             </button>
@@ -603,20 +610,20 @@ const sortedAwayResults = getSortedGlides();
                                 {campusResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-comfortaa cursor-pointer"
+                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-grotesk cursor-pointer"
                                     >
 
                                         {ride.creator?.tags?.length > 0 && (
                                             <div
                                                 className="flex gap-2 absolute -top-3 left-6 
       bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
-      text-xs font-medium shadow-md text-white 
+      text-xs  shadow-md text-white 
       justify-center items-center
       transition-colors duration-300 ease-in-out 
-      group-hover:bg-[#6d72ff]"
+      group-hover:bg-[#682db1] "
                                             >
-                                                <img src={starIcon} alt="star icon" width="20" height="20" />
-                                                <p className="text-xs">{ride.creator.tags[0]}</p>
+                                                <img src={starIcon} alt="star icon" width="17" height="17" />
+                                                <p className="text-sm font-grotesk">{ride.creator.tags[0]}</p>
                                             </div>
                                         )}
 
@@ -625,17 +632,18 @@ const sortedAwayResults = getSortedGlides();
 
                                         <div className="flex flex-col gap-5 mt-3">
                                             <span
-                                                className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide"
+                                                className="text-md w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center  bg-purple-500/20 text-purple-300 border border-purple-400/30 tracking-wide"
                                             >
                                                 {ride.source}
                                             </span>
 
-                                            <span className="px-3 py-1 text-sm rounded-xl text-white font-medium w-max">
+                                            <span className="px-3 py-1 text-md rounded-xl text-white  w-max">
                                                 <span className="text-gray-400">Glide-owner:</span>{" "}
                                                 {ride.creator?.name || "Unknown"}
                                             </span>
 
-                                            <button className="text-white text-sm bg-[#474a8f] px-5 p-3 rounded-xl cursor-pointer hover:bg-[#6d72ff] transition duration-300 font-comfortaa">
+                                            <button className="text-white text-md  px-5 p-3 rounded-xl cursor-pointer bg-[#682db1] 
+                                                hover:bg-[#943cff] transition duration-300 font-grotesk">
                                                 Book
                                             </button>
                                         </div>
@@ -682,7 +690,7 @@ const sortedAwayResults = getSortedGlides();
                                 {sortedAwayResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-comfortaa cursor-pointer"
+                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-grotesk cursor-pointer"
                                     >   <div
                                         className="flex gap-2 absolute -top-3 left-6 
     bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
