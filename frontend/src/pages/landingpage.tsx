@@ -381,6 +381,7 @@ export default function LandingPage() {
                             <p className="text-white text-md md:text-lg font-grotesk">Active Gliders</p>
                             <p className="text-white text-4xl font-bold mt-2 font-grotesk">350+</p>
                         </div>
+                        
 
                     </div>
                 </section>
