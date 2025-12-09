@@ -53,61 +53,62 @@ export default function LandingPage() {
     }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", {
-                email,
-                password,
-            });
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("glideUser", JSON.stringify(res.data.user));
+    e.preventDefault()
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+            { email, password }
+        )
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-            toast.success(`Logged in as ${res.data.user.name}`, {
-                style: { background: "#14532d", color: "white" },
-                onClose: () => navigate("/home"),
-            });
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || "Login failed");
-        }
-    };
+        toast.success(`Logged in as ${res.data.user.name}`, {
+            style: { background: "#14532d", color: "white" },
+            onClose: () => navigate("/home")
+        })
+    } catch (err: any) {
+        toast.error(err.response?.data?.message || "Login failed")
+    }
+}
+
 
     const handleRegister = async (e: React.FormEvent) => {
-        e.preventDefault();
-        try {
-            const res = await axios.post("http://localhost:5000/api/auth/register", {
-                name,
-                email,
-                password,
-            });
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("glideUser", JSON.stringify(res.data.user));
+    e.preventDefault()
+    try {
+        const res = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
+            { name, email, password }
+        )
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-            toast.success("Registration successful!", {
-                onClose: () => navigate("/home"),
-            });
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || "Registration failed");
-        }
-    };
+        toast.success("Registration successful", {
+            onClose: () => navigate("/home")
+        })
+    } catch (err: any) {
+        toast.error(err.response?.data?.message || "Registration failed")
+    }
+}
 
     const handleGoogleLogin = async () => {
-        try {
-            const result = await signInWithPopup(auth, googleProvider);
-            const idToken = await result.user.getIdToken();
+    try {
+        const result = await signInWithPopup(auth, googleProvider)
+        const idToken = await result.user.getIdToken()
 
-            const res = await axios.post("http://localhost:5000/api/auth/google", {
-                idToken,
-            });
-            localStorage.setItem("token", res.data.token);
-            localStorage.setItem("glideUser", JSON.stringify(res.data.user));
+        const res = await axios.post(
+            `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+            { idToken }
+        )
+        localStorage.setItem("token", res.data.token)
+        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-            toast.success("Google login successful!", {
-                onClose: () => navigate("/home"),
-            });
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || "Google login failed");
-        }
-    };
+        toast.success("Google login successful", {
+            onClose: () => navigate("/home")
+        })
+    } catch (err: any) {
+        toast.error(err.response?.data?.message || "Google login failed")
+    }
+}
 
 
     return (

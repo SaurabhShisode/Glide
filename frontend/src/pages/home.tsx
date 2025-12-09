@@ -19,7 +19,8 @@ export default function HomePage() {
     const [campusTab, setCampusTab] = useState<"find" | "add">("find");
     const [awayTab, setAwayTab] = useState<"find" | "add">("find");
     const [loadingGlides, setLoadingGlides] = useState(false);
-    const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+    const API_BASE = `${import.meta.env.VITE_BACKEND_URL}/api`
+
 
     const [campusSource, setCampusSource] = useState("");
     const [campusResults, setCampusResults] = useState<any[]>([]);
@@ -184,19 +185,19 @@ export default function HomePage() {
         }
     };
     const getSortedGlides = () => {
-  return [...awayResults].sort((a, b) => {
-    if (sortOption === "newest") {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    } else if (sortOption === "price") {
-      return a.price - b.price; // ascending
-    } else if (sortOption === "members") {
-      return b.memberCount - a.memberCount; // descending
-    }
-    return 0;
-  });
-};
+        return [...awayResults].sort((a, b) => {
+            if (sortOption === "newest") {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            } else if (sortOption === "price") {
+                return a.price - b.price;
+            } else if (sortOption === "members") {
+                return b.memberCount - a.memberCount;
+            }
+            return 0;
+        });
+    };
 
-const sortedAwayResults = getSortedGlides();
+    const sortedAwayResults = getSortedGlides();
 
 
     return (
