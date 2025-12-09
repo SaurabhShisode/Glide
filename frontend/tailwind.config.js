@@ -9,6 +9,7 @@ export default {
         oswald: ["Oswald", "sans-serif"],
         poppins: ["Poppins", "sans-serif"],
         grotesk: ["Grotesk", "sans-serif"],
+        inter: ["Inter", "sans-serif"]
       },
       keyframes: {
         scrollLeft: {

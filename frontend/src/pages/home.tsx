@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import userImg from "../assets/icons/user.svg";
 import clipboardImg from "../assets/icons/clipboard.svg";
 import Footer from "@/components/footer";
-import coinImg from "../assets/icons/coin.svg";
 import { StarsBackground } from "@/components/animate-ui/backgrounds/stars";
 import { ToastContainer, toast } from "react-toastify";
 import { motion, AnimatePresence } from "framer-motion";
@@ -23,6 +22,8 @@ export default function HomePage() {
 
 
     const [campusSource, setCampusSource] = useState("");
+    const [campusPrice, setCampusPrice] = useState("");
+
     const [campusResults, setCampusResults] = useState<any[]>([]);
     const [displayCampusRes, setdisplayCampusRes] = useState(false);
     const [displayAwayRes, setdisplayAwayRes] = useState(false);
@@ -34,6 +35,8 @@ export default function HomePage() {
 
     const [user, setUser] = useState<any>(null);
     const [sortOption, setSortOption] = useState("newest");
+    const [campusSortOption, setCampusSortOption] = useState("newest")
+    const [campusDropdownOpen, setCampusDropdownOpen] = useState(false)
 
 
     useEffect(() => {
@@ -47,32 +50,53 @@ export default function HomePage() {
     const handleGlideCampusSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+
+
         try {
             if (campusTab === "find") {
                 setLoadingGlides(true);
+
                 const res = await fetch(`${API_BASE}/glide-campus?source=${campusSource}`);
-                await new Promise((resolve) => setTimeout(resolve, 2000));
+                await new Promise(resolve => setTimeout(resolve, 2000));
                 const data = await res.json();
+
                 if (res.ok) {
                     setCampusResults(data.rides || []);
-
                 } else {
                     toast.error(data.message || "Failed to fetch campus glides");
                 }
 
             } else {
+
+
+                    console.log("Creating campus glide with source:", campusSource, "and price:", campusPrice);
+
                 if (!user) {
                     toast.error("You must be logged in to create a campus glide");
                     return;
                 }
-                const payload = { source: campusSource, creator: user.id };
+
+
+                if (campusSource.trim() === "" || campusPrice.trim() === "") {
+                    toast.error("Source and price are required");
+                    return;
+                }
+
+
+                const payload = {
+                    source: campusSource,
+                    creator: user.id,
+                    price: Number(campusPrice)
+                };
 
                 const res = await fetch(`${API_BASE}/glide-campus`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
+                    body: JSON.stringify(payload)
                 });
+
                 const data = await res.json();
+
                 if (res.ok) {
                     toast.success("Campus glide created successfully");
                 } else {
@@ -87,6 +111,7 @@ export default function HomePage() {
             setdisplayCampusRes(true);
         }
     };
+
 
 
     const handleGlideAwaySubmit = async (e: React.FormEvent) => {
@@ -198,6 +223,18 @@ export default function HomePage() {
     };
 
     const sortedAwayResults = getSortedGlides();
+    const getSortedCampusGlides = () => {
+        return [...campusResults].sort((a, b) => {
+            if (campusSortOption === "newest") {
+                return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            } else if (campusSortOption === "price") {
+                return a.price - b.price;
+            }
+            return 0;
+        });
+    };
+    const sortedCampusResults = getSortedCampusGlides();
+
 
 
     return (
@@ -260,14 +297,7 @@ export default function HomePage() {
 
 
                     <div className="col-span-6 flex gap-10">
-                        {active === "glide-campus" && (
-                            <div className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 transition-all duration-300 ease-in-out">
-                                <img className="rounded-full" src={coinImg} width="20px" />
-                                <p className="font-grotesk text-white text-lg font-semibold ">
-                                    {user?.glidePoints ?? 0}
-                                </p>
-                            </div>
-                        )}
+                        
                         <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer  px-4">
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
                             <p className="font-grotesk text-white text-lg  ">Glide-History</p>
@@ -376,21 +406,33 @@ export default function HomePage() {
                                                     Source Point
                                                 </label>
                                                 <select
-
                                                     value={campusSource}
                                                     onChange={(e) => setCampusSource(e.target.value)}
-
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
                                                 >
-
                                                     <option value="Boys Hostel B-1">Boys Hostel B-1</option>
-                                                    <option value="Boys Hostel B-1">Boys Hostel B-1</option>
+                                                    <option value="Boys Hostel B-2">Boys Hostel B-2</option>
                                                     <option value="AB-2">AB-2</option>
                                                     <option value="AB-1">AB-1</option>
                                                     <option value="Girls Hostel B-2">Girls Hostel B-2</option>
                                                     <option value="Girls Hostel B-1">Girls Hostel B-1</option>
                                                 </select>
+
                                             </div>
+
+                                            <div className="flex flex-col mt-4">
+                                                <label className="text-gray-300 font-grotesk mb-2">
+                                                    Price (₹)
+                                                </label>
+                                                <input
+                                                    type="number"
+                                                    placeholder="Enter price"
+                                                    value={campusPrice}
+                                                    onChange={(e) => setCampusPrice(e.target.value)}
+                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600"
+                                                />
+                                            </div>
+
 
                                             <button
                                                 type="submit"
@@ -604,19 +646,71 @@ export default function HomePage() {
                 <div className="mx-40">
                     {campusResults.length > 0 ? (
                         <div>
-                            <h3 className="text-xl font-semibold text-white font-poppins mb-7 mt-10">
-                                Available Campus Glides
-                            </h3>
+                            <div className="flex items-center space-between mb-6 justify-between ">
+                                <h3 className="text-xl font-semibold text-white font-poppins mb-7 mt-10">
+                                    Available Campus Glides
+                                </h3>
+                                <div className="relative inline-block text-left mb-6">
+                                    <div
+                                        onClick={() => setCampusDropdownOpen(!campusDropdownOpen)}
+                                        className="cursor-pointer px-4 py-3 bg-gray-800 border border-gray-600 
+                   rounded-xl text-white font-poppins flex items-center justify-between gap-4
+                   hover:bg-gray-700 transition"
+                                    >
+                                        <span>
+                                            {campusSortOption === "newest" ? "Newest First" : "Price Low to High"}
+                                        </span>
+                                        <span className={`transition-transform ${campusDropdownOpen ? "rotate-180" : ""}`}>
+                                            ▼
+                                        </span>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {campusDropdownOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute mt-2 w-48 bg-[#1a1f36] border border-gray-700 
+                           rounded-xl shadow-lg z-20 backdrop-blur-xl"
+                                            >
+                                                <div
+                                                    onClick={() => {
+                                                        setCampusSortOption("newest")
+                                                        setCampusDropdownOpen(false)
+                                                    }}
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-poppins rounded-t-xl"
+                                                >
+                                                    Newest First
+                                                </div>
+
+                                                <div
+                                                    onClick={() => {
+                                                        setCampusSortOption("price")
+                                                        setCampusDropdownOpen(false)
+                                                    }}
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-poppins rounded-b-xl"
+                                                >
+                                                    Price Low to High
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+
+                            </div>
+
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                                {campusResults.map((ride, idx) => (
+                                {sortedCampusResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-grotesk cursor-pointer"
+                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins cursor-pointer"
                                     >
 
                                         {ride.creator?.tags?.length > 0 && (
                                             <div
-                                                className="flex gap-2 absolute -top-3 left-6 
+                                                className="flex gap-2 absolute -top-3 right-6 
       bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
       text-xs  shadow-md text-white 
       justify-center items-center
@@ -624,30 +718,46 @@ export default function HomePage() {
       group-hover:bg-[#682db1] "
                                             >
                                                 <img src={starIcon} alt="star icon" width="17" height="17" />
-                                                <p className="text-sm font-grotesk">{ride.creator.tags[0]}</p>
+                                                <p className="text-sm font-poppins">{ride.creator.tags[0]}</p>
                                             </div>
                                         )}
 
 
 
 
-                                        <div className="flex flex-col gap-5 mt-3">
-                                            <span
-                                                className="text-md w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center  bg-purple-500/20 text-purple-300 border border-purple-400/30 tracking-wide"
-                                            >
+                                        <div className="flex flex-col gap-2 mt-3">
+
+
+                                            <span className="text-md w-max  px-2 py-2 pt-3 rounded-lg justify-center text-center bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
                                                 {ride.source}
                                             </span>
 
-                                            <span className="px-3 py-1 text-md rounded-xl text-white  w-max">
-                                                <span className="text-gray-400">Glide-owner:</span>{" "}
-                                                {ride.creator?.name || "Unknown"}
+                                            <p className="text-gray-400 text-sm ">
+                                                {new Date(ride.createdAt).toLocaleString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true
+                                                })}
+                                            </p>
+
+
+
+                                            <span className=" text-md rounded-xl text-white w-max ">
+                                                <span className="text-gray-400">Glide-owner:</span> {ride.creator?.name || "Unknown"}
+                                            </span>
+                                            <span className=" text-md rounded-xl text-white w-max ">
+                                                <span className="text-gray-400">Fare:</span> {ride.price} ₹
                                             </span>
 
-                                            <button className="text-white text-md  px-5 p-3 rounded-xl cursor-pointer bg-[#682db1] 
-                                                hover:bg-[#943cff] transition duration-300 font-grotesk">
+                                            <button className="text-white text-md px-5 p-3 rounded-xl cursor-pointer bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2">
                                                 Book
                                             </button>
+
                                         </div>
+
                                     </li>
 
 
