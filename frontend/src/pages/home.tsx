@@ -269,7 +269,7 @@ export default function HomePage() {
                     prev.filter(ride => ride._id !== selectedCampusRide)
                 );
 
-                navigate("/glide-history");
+                navigate("/history");
             } else {
                 toast.error(data.message || "Failed to book glide");
             }
@@ -344,9 +344,12 @@ export default function HomePage() {
 
                     <div className="col-span-6 flex gap-10">
 
-                        <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer  px-4">
-                            <img className="rounded-full  " src={clipboardImg} width="30px"></img>
-                            <p className="font-grotesk text-white text-lg  ">Glide-History</p>
+                        <div
+                            onClick={() => navigate("/history")}
+                            className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition"
+                        >
+                            <img className="rounded-full" src={clipboardImg} width="30px" />
+                            <p className="font-grotesk text-white text-lg">Glide History</p>
                         </div>
                         <div className="group flex items-center gap-2 p-2  rounded-4xl cursor-pointer px-4">
                             <img className="rounded-full" src={userImg} width="30px" />
