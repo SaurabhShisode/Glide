@@ -200,3 +200,38 @@
     @apply bg-background text-foreground;
   }
 }
+.popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+.popup-box {
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  min-width: 260px;
+  text-align: center;
+}
+.popup-actions button {
+  padding: 8px 14px;
+  margin: 6px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.popup-actions button:first-child {
+  background: #2563eb;
+  color: white;
+}
+
+.popup-actions button:last-child {
+  background: #e5e7eb;
+}

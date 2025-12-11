@@ -10,8 +10,9 @@ import addImg from "../assets/icons/add.svg";
 import BouncingDotsLoader from "@/components/bouncingdotsloader";
 import starIcon from "../assets/star-icon.svg";
 import memberImg from "../assets/members.svg";
-
-
+import { ChevronDown } from 'lucide-react';
+import { useNavigate } from "react-router-dom";
+import ConfirmPopup from "@/components/ConfirmPopup";
 
 export default function HomePage() {
     const [active, setActive] = useState("glide-campus");
@@ -37,7 +38,11 @@ export default function HomePage() {
     const [sortOption, setSortOption] = useState("newest");
     const [campusSortOption, setCampusSortOption] = useState("newest")
     const [campusDropdownOpen, setCampusDropdownOpen] = useState(false)
+    const [selectedCampusRide, setSelectedCampusRide] = useState<string | null>(null);
+    const [showCampusPopup, setShowCampusPopup] = useState(false);
 
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         const storedUser = localStorage.getItem("glideUser");
@@ -69,7 +74,7 @@ export default function HomePage() {
             } else {
 
 
-                    console.log("Creating campus glide with source:", campusSource, "and price:", campusPrice);
+                console.log("Creating campus glide with source:", campusSource, "and price:", campusPrice);
 
                 if (!user) {
                     toast.error("You must be logged in to create a campus glide");
@@ -235,6 +240,47 @@ export default function HomePage() {
     };
     const sortedCampusResults = getSortedCampusGlides();
 
+    const openCampusBookPopup = (rideId: string) => {
+        if (!user) {
+            toast.error("You must be logged in to book a campus glide");
+            return;
+        }
+
+        setSelectedCampusRide(rideId);
+        setShowCampusPopup(true);
+    };
+
+    const confirmCampusBooking = async () => {
+        try {
+            if (!selectedCampusRide || !user) return;
+
+            const res = await fetch(`${API_BASE}/glide-campus/book/${selectedCampusRide}`, {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ userId: user.id }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                toast.success("Glide booked successfully");
+
+                setCampusResults(prev =>
+                    prev.filter(ride => ride._id !== selectedCampusRide)
+                );
+
+                navigate("/glide-history");
+            } else {
+                toast.error(data.message || "Failed to book glide");
+            }
+        } catch (err) {
+            toast.error("Something went wrong");
+        } finally {
+            setShowCampusPopup(false);
+            setSelectedCampusRide(null);
+        }
+    };
+
 
 
     return (
@@ -297,7 +343,7 @@ export default function HomePage() {
 
 
                     <div className="col-span-6 flex gap-10">
-                        
+
                         <div className="group flex items-center gap-2  p-2 rounded-4xl cursor-pointer  px-4">
                             <img className="rounded-full  " src={clipboardImg} width="30px"></img>
                             <p className="font-grotesk text-white text-lg  ">Glide-History</p>
@@ -661,7 +707,7 @@ export default function HomePage() {
                                             {campusSortOption === "newest" ? "Newest First" : "Price Low to High"}
                                         </span>
                                         <span className={`transition-transform ${campusDropdownOpen ? "rotate-180" : ""}`}>
-                                            ▼
+                                            <ChevronDown />
                                         </span>
                                     </div>
 
@@ -732,7 +778,7 @@ export default function HomePage() {
                                                 {ride.source}
                                             </span>
 
-                                            <p className="text-gray-400 text-sm ">
+                                            <p className="text-gray-400 text-md ">
                                                 {new Date(ride.createdAt).toLocaleString("en-IN", {
                                                     day: "2-digit",
                                                     month: "short",
@@ -752,7 +798,9 @@ export default function HomePage() {
                                                 <span className="text-gray-400">Fare:</span> {ride.price} ₹
                                             </span>
 
-                                            <button className="text-white text-md px-5 p-3 rounded-xl cursor-pointer bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2">
+                                            <button
+                                                onClick={() => openCampusBookPopup(ride._id)}
+                                                className="text-white text-md px-5 p-3 rounded-xl cursor-pointer bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2">
                                                 Book
                                             </button>
 
@@ -879,6 +927,14 @@ export default function HomePage() {
                 draggable
                 theme="dark"
             />
+            <ConfirmPopup
+                open={showCampusPopup}
+                title="Confirm Glide Booking?"
+                onConfirm={() => confirmCampusBooking()}
+                onCancel={() => setShowCampusPopup(false)}
+            />
+
+
         </div >
     );
 }

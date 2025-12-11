@@ -25,6 +25,9 @@ export default function LandingPage() {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loadingLogin, setLoadingLogin] = useState(false)
+    const [loadingRegister, setLoadingRegister] = useState(false)
+    const [loadingGoogle, setLoadingGoogle] = useState(false)
 
 
 
@@ -53,62 +56,72 @@ export default function LandingPage() {
     }, []);
 
     const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-        const res = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
-            { email, password }
-        )
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
+        e.preventDefault()
+        setLoadingLogin(true)
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/auth/login`,
+                { email, password }
+            )
+            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-        toast.success(`Logged in as ${res.data.user.name}`, {
-            style: { background: "#14532d", color: "white" },
-            onClose: () => navigate("/home")
-        })
-    } catch (err: any) {
-        toast.error(err.response?.data?.message || "Login failed")
+            toast.success(`Logged in as ${res.data.user.name}`, {
+                style: { background: "#14532d", color: "white" },
+                onClose: () => navigate("/home")
+            })
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Login failed")
+        } finally {
+            setLoadingLogin(false)
+        }
     }
-}
 
 
     const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault()
-    try {
-        const res = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
-            { name, email, password }
-        )
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
+        e.preventDefault()
+        setLoadingRegister(true)
+        try {
+            const res = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
+                { name, email, password }
+            )
+            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-        toast.success("Registration successful", {
-            onClose: () => navigate("/home")
-        })
-    } catch (err: any) {
-        toast.error(err.response?.data?.message || "Registration failed")
+            toast.success("Registration successful", {
+                onClose: () => navigate("/home")
+            })
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Registration failed")
+        } finally {
+            setLoadingRegister(false)
+        }
     }
-}
+
 
     const handleGoogleLogin = async () => {
-    try {
-        const result = await signInWithPopup(auth, googleProvider)
-        const idToken = await result.user.getIdToken()
+        setLoadingGoogle(true)
+        try {
+            const result = await signInWithPopup(auth, googleProvider)
+            const idToken = await result.user.getIdToken()
 
-        const res = await axios.post(
-            `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
-            { idToken }
-        )
-        localStorage.setItem("token", res.data.token)
-        localStorage.setItem("glideUser", JSON.stringify(res.data.user))
+            const res = await axios.post(
+                `${import.meta.env.VITE_BACKEND_URL}/api/auth/google`,
+                { idToken }
+            )
+            localStorage.setItem("token", res.data.token)
+            localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
-        toast.success("Google login successful", {
-            onClose: () => navigate("/home")
-        })
-    } catch (err: any) {
-        toast.error(err.response?.data?.message || "Google login failed")
+            toast.success("Google login successful", {
+                onClose: () => navigate("/home")
+            })
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || "Google login failed")
+        } finally {
+            setLoadingGoogle(false)
+        }
     }
-}
 
 
     return (
@@ -224,10 +237,16 @@ export default function LandingPage() {
                                             />
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+                                                disabled={loadingLogin}
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition flex justify-center items-center"
                                             >
-                                                Log In
+                                                {loadingLogin ? (
+                                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    "Log In"
+                                                )}
                                             </button>
+
                                         </form>
 
                                         <div className="w-full h-px bg-gray-300 my-6"></div>
@@ -236,11 +255,19 @@ export default function LandingPage() {
                                             <button
                                                 type="button"
                                                 onClick={handleGoogleLogin}
-                                                className="flex items-center gap-3 cursor-pointer px-6 py-3 rounded-2xl bg-white text-gray-700 font-semibold shadow-md hover:bg-gray-100 transition "
+                                                disabled={loadingGoogle}
+                                                className="flex items-center gap-3 cursor-pointer px-6 py-3 rounded-2xl bg-white text-gray-700 font-semibold shadow-md hover:bg-gray-100 transition justify-center"
                                             >
-                                                <FcGoogle size={24} />
-                                                <span>Continue with Google</span>
+                                                {loadingGoogle ? (
+                                                    <div className="w-5 h-5 border-2 border-gray-700 border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    <>
+                                                        <FcGoogle size={24} />
+                                                        <span>Continue with Google</span>
+                                                    </>
+                                                )}
                                             </button>
+
                                         </div>
 
                                         <p className="mt-4 text-white text-sm text-center">
@@ -285,10 +312,16 @@ export default function LandingPage() {
                                             />
                                             <button
                                                 type="submit"
-                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+                                                disabled={loadingRegister}
+                                                className="cursor-pointer px-6 py-3 rounded-2xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition flex justify-center items-center"
                                             >
-                                                Register
+                                                {loadingRegister ? (
+                                                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                                                ) : (
+                                                    "Register"
+                                                )}
                                             </button>
+
                                         </form>
 
                                         <p className="text-center mt-4 text-white text-sm">
@@ -382,7 +415,7 @@ export default function LandingPage() {
                             <p className="text-white text-md md:text-lg font-grotesk">Active Gliders</p>
                             <p className="text-white text-4xl font-bold mt-2 font-grotesk">350+</p>
                         </div>
-                        
+
 
                     </div>
                 </section>
