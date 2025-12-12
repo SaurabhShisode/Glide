@@ -40,6 +40,7 @@ export default function HomePage() {
     const [campusDropdownOpen, setCampusDropdownOpen] = useState(false)
     const [selectedCampusRide, setSelectedCampusRide] = useState<string | null>(null);
     const [showCampusPopup, setShowCampusPopup] = useState(false);
+    const [userMenuOpen, setUserMenuOpen] = useState(false);
 
 
     const navigate = useNavigate();
@@ -51,6 +52,15 @@ export default function HomePage() {
         }
     }, []);
 
+    useEffect(() => {
+        const closeMenu = (e: MouseEvent) => {
+            if (!(e.target as HTMLElement).closest(".user-menu-area")) {
+                setUserMenuOpen(false);
+            }
+        };
+        document.addEventListener("click", closeMenu);
+        return () => document.removeEventListener("click", closeMenu);
+    }, []);
 
     const handleGlideCampusSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -351,12 +361,57 @@ export default function HomePage() {
                             <img className="rounded-full" src={clipboardImg} width="30px" />
                             <p className="font-grotesk text-white text-lg">Glide History</p>
                         </div>
-                        <div className="group flex items-center gap-2 p-2  rounded-4xl cursor-pointer px-4">
-                            <img className="rounded-full" src={userImg} width="30px" />
-                            <p className="font-grotesk text-white text-lg ">
-                                Hello, {user?.name ?? "Lion"}
-                            </p>
+                        <div className="relative user-menu-area">
+                        <div className="relative">
+                            <div
+                                onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition "
+                            >
+                                <img className="rounded-full" src={userImg} width="30px" />
+                                <p className="font-grotesk text-white text-lg">
+                                    Hello, {user?.name ?? "Lion"}
+                                </p>
+                            </div>
+
+                            <AnimatePresence>
+                                {userMenuOpen && (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        transition={{ duration: 0.2 }}
+                                        className="absolute right-0 mt-2 w-48 rounded-xl bg-[#0d1120] border border-gray-700 shadow-xl p-3 z-50"
+                                    >
+                                        <button
+                                            onClick={() => navigate("/profile")}
+                                            className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                        >
+                                            Your Profile
+                                        </button>
+
+                                        <button
+                                            onClick={() => navigate("/history")}
+                                            className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                        >
+                                            Glide History
+                                        </button>
+
+                                        <button
+                                            onClick={() => {
+                                                localStorage.removeItem("glideUser");
+                                                localStorage.removeItem("token");
+                                                navigate("/");
+                                            }}
+                                            className="w-full text-left text-red-400 hover:text-red-500 px-3 py-2 rounded-lg hover:bg-red-500/10 transition font-grotesk mt-1 cursor-pointer"
+                                        >
+                                            Sign Out
+                                        </button>
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
+                        </div>
+
 
                     </div>
                 </div>

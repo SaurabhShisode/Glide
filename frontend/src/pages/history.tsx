@@ -5,6 +5,7 @@ import Footer from "@/components/footer";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
+
 const API_BASE = import.meta.env.VITE_BACKEND_URL + "/api";
 
 interface IUser {
@@ -57,10 +58,14 @@ export default function HistoryPage() {
 
     if (loading)
         return (
-            <div className="w-full bg-gradient-to-b 
+            <>
+                <div className="w-full bg-gradient-to-b 
       from-[#1a0734] via-[#2d085a] to-[#682db1] h-screen flex items-center justify-center text-white text-xl font-grotesk">
-                Loading your Glide history...
-            </div>
+                    Loading your Glide history
+               
+                </div>
+                
+            </>
         );
 
     return (
@@ -104,7 +109,7 @@ export default function HistoryPage() {
                         View all your taken and posted glides.
                     </p>
 
-                    {/* Tabs */}
+
                     <div className="flex gap-4 mb-10">
                         <button
                             onClick={() => setActiveTab("taken")}
@@ -154,10 +159,10 @@ export default function HistoryPage() {
                         )}
                     </AnimatePresence>
                 </section>
-                 <Footer />
+                <Footer />
             </div>
 
-           
+
         </div>
     );
 }
@@ -168,7 +173,7 @@ export default function HistoryPage() {
 function GlideList({
     data,
     type,
-    user
+
 }: {
     data: IRide[];
     type: "taken" | "posted";
@@ -201,13 +206,13 @@ function GlideList({
               hover:shadow-xl hover:scale-[1.02] transition-all duration-300 
               text-white font-grotesk backdrop-blur-lg cursor-pointer"
                     >
-                        {/* Top line: Summary + Time (right aligned) */}
+
                         <div className="flex items-center justify-between w-full mb-2">
                             {type === "taken" ? (
                                 <p className="text-lg">
                                     You booked a glide from{" "}
                                     <span className="text-[#8e7fff] font-semibold">{ride.source}</span>{" "}
-                                    with <span className="font-semibold">{otherPerson}</span>.
+                                    by <span className="font-semibold">{otherPerson}</span>.
                                 </p>
                             ) : (
                                 <p className="text-lg">
@@ -222,7 +227,7 @@ function GlideList({
                             </p>
                         </div>
 
-                       
+
                         <AnimatePresence>
                             {isOpen && (
                                 <motion.div
@@ -230,9 +235,9 @@ function GlideList({
                                     animate={{ opacity: 1, height: "auto" }}
                                     exit={{ opacity: 0, height: 0 }}
                                     transition={{ duration: 0.3 }}
-                                    className="mt-4 overflow-hidden"
+                                    className=" overflow-hidden"
                                 >
-                                    <div className="p-4 bg-[#0d1120] rounded-xl border border-gray-700">
+                                    <div className="p-4  rounded-xl  ">
                                         <p className="text-gray-300 text-sm mb-2">
                                             Source: {ride.source}
                                         </p>
