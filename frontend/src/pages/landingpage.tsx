@@ -49,6 +49,13 @@ export default function LandingPage() {
         { name: "Your commute, simplified with Glide." },
     ];
 
+    const redirectAfterAuth = (user: any) => {
+  if (!user.emailVerified || !user.phoneVerified) {
+    navigate("/verify")
+  } else {
+    navigate("/home")
+  }
+}
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2000);
@@ -68,7 +75,7 @@ export default function LandingPage() {
 
             toast.success(`Logged in as ${res.data.user.name}`, {
                 style: { background: "#14532d", color: "white" },
-                onClose: () => navigate("/home")
+                onClose: () => redirectAfterAuth(res.data.user)
             })
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Login failed")
@@ -90,7 +97,7 @@ export default function LandingPage() {
             localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
             toast.success("Registration successful", {
-                onClose: () => navigate("/home")
+                onClose: () => redirectAfterAuth(res.data.user)
             })
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Registration failed")
@@ -114,7 +121,7 @@ export default function LandingPage() {
             localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
             toast.success("Google login successful", {
-                onClose: () => navigate("/home")
+                onClose: () => redirectAfterAuth(res.data.user)
             })
         } catch (err: any) {
             toast.error(err.response?.data?.message || "Google login failed")
