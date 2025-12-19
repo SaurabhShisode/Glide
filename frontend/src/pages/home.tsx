@@ -47,6 +47,8 @@ export default function HomePage() {
     const [sortOptionAway, setSortOptionAway] = useState<"newest" | "price" | "members">("newest")
     const [selectedAwayRide, setSelectedAwayRide] = useState<string | null>(null)
     const [showAwayPopup, setShowAwayPopup] = useState(false)
+    const [awayTotalMembers, setAwayTotalMembers] = useState("")
+const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
 
 
     const navigate = useNavigate();
@@ -155,38 +157,56 @@ export default function HomePage() {
                 } else {
                     toast.error(data.message || "Failed to fetch away glides");
                 }
-            } else {
+            }else {
+    if (!user) {
+        toast.error("You must be logged in to create an away glide")
+        return
+    }
 
-                if (!user) {
-                    toast.error("You must be logged in to create an away glide");
-                    return;
-                }
-                if (!awaySource || !awayDestination || !awayDate || !awayPrice || !awayTime) {
-                    console.log(awaySource, awayDestination, awayDate, awayPrice, awayTime);
-                    toast.error(" required");
-                    return;
-                }
-                const payload = {
-                    source: awaySource,
-                    destination: awayDestination,
-                    date: awayDate,
-                    departureTime: awayTime,
-                    price: Number(awayPrice),
-                    creator: user.id,
-                };
-                console.log(payload);
-                const res = await fetch(`${API_BASE}/glide-away`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(payload),
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    toast.success("Away glide created successfully");
-                } else {
-                    toast.error(data.message || "Failed to create away glide");
-                }
-            }
+    if (
+        !awaySource ||
+        !awayDestination ||
+        !awayDate ||
+        !awayTime ||
+        !awayPrice ||
+        !awayTotalMembers
+    ) {
+       
+        toast.error("All required fields must be filled")
+        return
+    }
+
+    if (Number(awayTotalMembers) < 1) {
+        toast.error("Total members must be at least 1")
+        return
+    }
+
+    const payload = {
+        source: awaySource,
+        destination: awayDestination,
+        date: awayDate,
+        departureTime: awayTime,
+        price: Number(awayPrice),
+        totalMembers: Number(awayTotalMembers),
+        whatsappGroup: awayWhatsappGroup || null,
+        creator: user.id
+    }
+
+    const res = await fetch(`${API_BASE}/glide-away`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+    })
+
+    const data = await res.json()
+
+    if (res.ok) {
+        toast.success("Away glide created successfully")
+    } else {
+        toast.error(data.message || "Failed to create away glide")
+    }
+}
+
         } catch (error) {
             console.error("Error handling away glide:", error);
             toast.error("Something went wrong");
@@ -682,7 +702,8 @@ export default function HomePage() {
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
-                                                >
+                                                >   
+                                                <option value=" ">Select Source</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
                                                     <option value="VIT Highway">VIT Highway</option>
@@ -704,7 +725,7 @@ export default function HomePage() {
                                                     onChange={(e) => setAwayDestination(e.target.value)}
 
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
-                                                >
+                                                ><option value=" ">Select Destination</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
                                                     <option value="VIT Highway">VIT Highway</option>
@@ -758,6 +779,42 @@ export default function HomePage() {
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
                                                 />
                                             </div>
+                                            <div className="flex gap-5 w-full">
+  <div className="flex flex-col w-1/2">
+    <label className="text-gray-300 font-grotesk mb-2">
+      Total Members
+    </label>
+    <input
+      type="number"
+      min={1}
+      value={awayTotalMembers}
+      onChange={(e) => setAwayTotalMembers(e.target.value)}
+      placeholder="Max members allowed"
+      className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+      transition-all duration-300 focus:outline-none 
+      focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff]"
+    />
+  </div>
+
+  <div className="flex flex-col w-1/2">
+    <label className="text-gray-300 font-grotesk mb-2">
+      WhatsApp Group Link
+    </label>
+    <input
+      type="url"
+      value={awayWhatsappGroup}
+      onChange={(e) => setAwayWhatsappGroup(e.target.value)}
+      placeholder="Optional"
+      className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+      transition-all duration-300 focus:outline-none 
+      focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff]"
+    />
+  </div>
+</div>
+
+<p className="text-sm text-gray-400 font-grotesk">
+  Adding a WhatsApp group is recommended so members can coordinate easily.
+</p>
 
                                             <button
                                                 type="submit"
@@ -1006,84 +1063,86 @@ export default function HomePage() {
 
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {sortedAwayResults.map((ride, idx) => (
-                                    <li
-                                        key={idx}
-                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins cursor-pointer"
-                                    >
+  <li
+    key={idx}
+    className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins"
+  >
+    <div
+      className="flex gap-2 absolute -top-3 right-6 
+      bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
+      text-xs shadow-md text-white 
+      justify-center items-center
+      transition-colors duration-300 ease-in-out 
+      group-hover:bg-[#682db1]"
+    >
+      <img src={memberImg} alt="members" width="17" height="17" />
+      <p className="text-sm font-poppins">
+        {ride.currentMembers} / {ride.totalMembers} Members
+      </p>
+    </div>
 
-                                        <div
-                                            className="flex gap-2 absolute -top-3 right-6 
-    bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
-    text-xs shadow-md text-white 
-    justify-center items-center
-    transition-colors duration-300 ease-in-out 
-    group-hover:bg-[#682db1]"
-                                        >
-                                            <img src={memberImg} alt="members" width="17" height="17" />
-                                            <p className="text-sm font-poppins">
-                                                {ride.memberCount} {ride.memberCount === 1 ? "Member" : "Members"}
-                                            </p>
+    <div className="flex flex-col gap-3 mt-5">
 
-                                        </div>
+      <div className="flex items-center justify-between">
+        <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+          {ride.source}
+        </span>
 
-                                        <div className="flex flex-col gap-3 mt-5">
+        <span className="text-gray-400 text-2xl">➝</span>
 
-                                            <div className="flex items-center justify-between">
-                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-                                                    {ride.source}
-                                                </span>
+        <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+          {ride.destination}
+        </span>
+      </div>
 
-                                                <span className="text-gray-400 text-2xl">➝</span>
+      <div className="flex justify-between">
+        <p className="text-gray-400 text-md">
+          <span className="text-gray-500">Date:</span>{" "}
+          {new Date(ride.date).toLocaleDateString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric"
+          })}
+        </p>
 
-                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-                                                    {ride.destination}
-                                                </span>
-                                            </div>
+        <p className="text-gray-400 text-md">
+          <span className="text-gray-500">Departure:</span>{" "}
+          {new Date(`1970-01-01T${ride.departureTime}`).toLocaleTimeString(
+            "en-IN",
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+              hour12: true
+            }
+          )}
+        </p>
+      </div>
 
-                                            <div className="flex  justify-between">
-                                                <p className="text-gray-400 text-md">
-                                                    <span className="text-gray-500">Date:</span>
-                                                    {" "}
-                                                    {new Date(ride.date).toLocaleString("en-IN", {
-                                                        day: "2-digit",
-                                                        month: "short",
-                                                        year: "numeric",
+      <span className="text-md text-gray-400">
+        <span className="text-gray-400">Glide-owner:</span>{" "}
+        {ride.creator?.name || "Unknown"}
+      </span>
 
-                                                    })}
-                                                </p>
-                                                <p className="text-gray-400 text-md">
-                                                    <span className="text-gray-500">Departure:</span>{" "}
-                                                    {new Date(`1970-01-01T${ride.departureTime}`)
-                                                        .toLocaleTimeString("en-IN", {
-                                                            hour: "2-digit",
-                                                            minute: "2-digit",
-                                                            hour12: true
-                                                        })}
-                                                </p>
-                                            </div>
+      <span className="text-md text-gray-400">
+        <span className="text-gray-400">Fare:</span> ₹{ride.price}
+      </span>
 
-                                            <span className="text-md text-gray-400">
-                                                <span className="text-gray-400">Glide-owner:</span>{" "}
-                                                {ride.creator?.name || "Unknown"}
-                                            </span>
+      <button
+        disabled={ride.availableSeats === 0}
+        onClick={() => openAwayJoinPopup(ride._id)}
+        className={`text-white text-md px-5 p-3 rounded-xl font-poppins mt-2 transition duration-300
+          ${
+            ride.availableSeats === 0
+              ? "bg-gray-600 cursor-not-allowed"
+              : "bg-[#682db1] hover:bg-[#943cff] cursor-pointer"
+          }`}
+      >
+        {ride.availableSeats === 0 ? "Glide Full" : "Join Glide"}
+      </button>
+    </div>
+  </li>
+))}
 
-                                            <span className="text-md text-gray-400">
-                                                <span className="text-gray-400">Fare:</span> ₹{ride.price}
-                                            </span>
-
-
-                                            <button
-                                                onClick={() => openAwayJoinPopup(ride._id)}
-
-                                                className="text-white text-md px-5 p-3 rounded-xl cursor-pointer 
-      bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2"
-                                            >
-                                                Join Glide
-                                            </button>
-                                        </div>
-                                    </li>
-
-                                ))}
                             </ul>
                         </div>
                     ) : (
