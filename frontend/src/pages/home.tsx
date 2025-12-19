@@ -33,6 +33,8 @@ export default function HomePage() {
     const [awayDate, setAwayDate] = useState("");
     const [awayPrice, setAwayPrice] = useState("");
     const [awayResults, setAwayResults] = useState<any[]>([]);
+    const [awayTime, setAwayTime] = useState("")
+
 
     const [user, setUser] = useState<any>(null);
     const [sortOption, setSortOption] = useState("newest");
@@ -41,6 +43,8 @@ export default function HomePage() {
     const [selectedCampusRide, setSelectedCampusRide] = useState<string | null>(null);
     const [showCampusPopup, setShowCampusPopup] = useState(false);
     const [userMenuOpen, setUserMenuOpen] = useState(false);
+    const [awayDropdownOpen, setAwayDropdownOpen] = useState(false)
+    const [sortOptionAway, setSortOptionAway] = useState<"newest" | "price" | "members">("newest")
 
 
     const navigate = useNavigate();
@@ -155,7 +159,7 @@ export default function HomePage() {
                     toast.error("You must be logged in to create an away glide");
                     return;
                 }
-                if (!awaySource || !awayDestination || !awayDate || !awayPrice) {
+                if (!awaySource || !awayDestination || !awayDate || !awayPrice || !awayTime) {
                     toast.error(" required");
                     return;
                 }
@@ -163,10 +167,11 @@ export default function HomePage() {
                     source: awaySource,
                     destination: awayDestination,
                     date: awayDate,
+                    departureTime: awayTime,
                     price: Number(awayPrice),
                     creator: user.id,
                 };
-
+                console.log(payload);
                 const res = await fetch(`${API_BASE}/glide-away`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
@@ -362,54 +367,54 @@ export default function HomePage() {
                             <p className="font-grotesk text-white text-lg">Glide History</p>
                         </div>
                         <div className="relative user-menu-area">
-                        <div className="relative">
-                            <div
-                                onClick={() => setUserMenuOpen(!userMenuOpen)}
-                                className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition "
-                            >
-                                <img className="rounded-full" src={userImg} width="30px" />
-                                <p className="font-grotesk text-white text-lg">
-                                    Hello, {user?.name ?? "Lion"}
-                                </p>
+                            <div className="relative">
+                                <div
+                                    onClick={() => setUserMenuOpen(!userMenuOpen)}
+                                    className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition "
+                                >
+                                    <img className="rounded-full" src={userImg} width="30px" />
+                                    <p className="font-grotesk text-white text-lg">
+                                        Hello, {user?.name ?? "Lion"}
+                                    </p>
+                                </div>
+
+                                <AnimatePresence>
+                                    {userMenuOpen && (
+                                        <motion.div
+                                            initial={{ opacity: 0, y: -10 }}
+                                            animate={{ opacity: 1, y: 0 }}
+                                            exit={{ opacity: 0, y: -10 }}
+                                            transition={{ duration: 0.2 }}
+                                            className="absolute right-0 mt-2 w-48 rounded-xl bg-[#0d1120] border border-gray-700 shadow-xl p-3 z-50"
+                                        >
+                                            <button
+                                                onClick={() => navigate("/profile")}
+                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                            >
+                                                Your Profile
+                                            </button>
+
+                                            <button
+                                                onClick={() => navigate("/history")}
+                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                            >
+                                                Glide History
+                                            </button>
+
+                                            <button
+                                                onClick={() => {
+                                                    localStorage.removeItem("glideUser");
+                                                    localStorage.removeItem("token");
+                                                    navigate("/");
+                                                }}
+                                                className="w-full text-left text-red-400 hover:text-red-500 px-3 py-2 rounded-lg hover:bg-red-500/10 transition font-grotesk mt-1 cursor-pointer"
+                                            >
+                                                Sign Out
+                                            </button>
+                                        </motion.div>
+                                    )}
+                                </AnimatePresence>
                             </div>
-
-                            <AnimatePresence>
-                                {userMenuOpen && (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: -10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -10 }}
-                                        transition={{ duration: 0.2 }}
-                                        className="absolute right-0 mt-2 w-48 rounded-xl bg-[#0d1120] border border-gray-700 shadow-xl p-3 z-50"
-                                    >
-                                        <button
-                                            onClick={() => navigate("/profile")}
-                                            className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
-                                        >
-                                            Your Profile
-                                        </button>
-
-                                        <button
-                                            onClick={() => navigate("/history")}
-                                            className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
-                                        >
-                                            Glide History
-                                        </button>
-
-                                        <button
-                                            onClick={() => {
-                                                localStorage.removeItem("glideUser");
-                                                localStorage.removeItem("token");
-                                                navigate("/");
-                                            }}
-                                            className="w-full text-left text-red-400 hover:text-red-500 px-3 py-2 rounded-lg hover:bg-red-500/10 transition font-grotesk mt-1 cursor-pointer"
-                                        >
-                                            Sign Out
-                                        </button>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
-                        </div>
                         </div>
 
 
@@ -696,16 +701,38 @@ export default function HomePage() {
                                                 </select>
                                             </div>
 
+                                            <div className="flex gap-5 w-full">
+                                                <div className="flex flex-col w-1/2">
+                                                    <label className="text-gray-300 font-grotesk mb-2">
+                                                        Date
+                                                    </label>
+                                                    <input
+                                                        type="date"
+                                                        value={awayDate}
+                                                        onChange={(e) => setAwayDate(e.target.value)}
+                                                        className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+                 transition-all duration-300 focus:outline-none 
+                 focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] 
+                 appearance-none"
+                                                    />
+                                                </div>
 
-                                            <div className="flex flex-col">
-                                                <label className="text-gray-300 font-grotesk mb-2">Date</label>
-                                                <input
-                                                    type="date"
-                                                    value={awayDate}
-                                                    onChange={(e) => setAwayDate(e.target.value)}
-                                                    className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
-                                                />
+                                                <div className="flex flex-col w-1/2">
+                                                    <label className="text-gray-300 font-grotesk mb-2">
+                                                        Departure Time
+                                                    </label>
+                                                    <input
+                                                        type="time"
+                                                        value={awayTime}
+                                                        onChange={(e) => setAwayTime(e.target.value)}
+                                                        className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+                 transition-all duration-300 focus:outline-none 
+                 focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] 
+                 appearance-none"
+                                                    />
+                                                </div>
                                             </div>
+
 
 
                                             <div className="flex flex-col">
@@ -889,72 +916,159 @@ export default function HomePage() {
 
                     {sortedAwayResults.length > 0 ? (
                         <div>
-                            <h3 className="text-xl font-semibold text-white font-poppins mb-4">
-                                Available Away Glides
-                            </h3>
-                            < div className="flex justify-end mb-4">
-                                <select
-                                    value={sortOption}
-                                    onChange={(e) => setSortOption(e.target.value)}
-                                    className="px-3 py-2 rounded-lg bg-[#1f2937] text-white border border-gray-600"
-                                >
-                                    <option value="newest">Newest First</option>
-                                    <option value="price">Sort by Price</option>
-                                    <option value="members">Sort by Members</option>
-                                </select>
+                            <div className="flex items-center space-between mb-6 justify-between ">
+                                <h3 className="text-xl font-semibold text-white font-poppins mb-4">
+                                    Available Away Glides
+                                </h3>
+                                <div className="relative inline-block text-left mb-6">
+                                    <div
+                                        onClick={() => setAwayDropdownOpen(!awayDropdownOpen)}
+                                        className="cursor-pointer px-4 py-3 bg-gray-800 border border-gray-600 
+      rounded-xl text-white font-poppins flex items-center justify-between gap-4
+      hover:bg-gray-700 transition"
+                                    >
+                                        <span>
+                                            {sortOptionAway === "newest"
+                                                ? "Newest First"
+                                                : sortOptionAway === "price"
+                                                    ? "Price Low to High"
+                                                    : "Members Count"}
+                                        </span>
+
+                                        <span
+                                            className={`transition-transform ${awayDropdownOpen ? "rotate-180" : ""
+                                                }`}
+                                        >
+                                            <ChevronDown />
+                                        </span>
+                                    </div>
+
+                                    <AnimatePresence>
+                                        {awayDropdownOpen && (
+                                            <motion.div
+                                                initial={{ opacity: 0, y: -10 }}
+                                                animate={{ opacity: 1, y: 0 }}
+                                                exit={{ opacity: 0, y: -10 }}
+                                                transition={{ duration: 0.2 }}
+                                                className="absolute mt-2 w-52 bg-[#1a1f36] border border-gray-700 
+          rounded-xl shadow-lg z-20 backdrop-blur-xl"
+                                            >
+                                                <div
+                                                    onClick={() => {
+                                                        setSortOptionAway("newest")
+                                                        setAwayDropdownOpen(false)
+                                                    }}
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] 
+            text-white font-poppins rounded-t-xl"
+                                                >
+                                                    Newest First
+                                                </div>
+
+                                                <div
+                                                    onClick={() => {
+                                                        setSortOption("price")
+                                                        setAwayDropdownOpen(false)
+                                                    }}
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] 
+            text-white font-poppins"
+                                                >
+                                                    Price Low to High
+                                                </div>
+
+                                                <div
+                                                    onClick={() => {
+                                                        setSortOption("members")
+                                                        setAwayDropdownOpen(false)
+                                                    }}
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] 
+            text-white font-poppins rounded-b-xl"
+                                                >
+                                                    Members Count
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
                             </div>
+
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {sortedAwayResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="relative p-6 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-grotesk cursor-pointer"
-                                    >   <div
-                                        className="flex gap-2 absolute -top-3 left-6 
+                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins cursor-pointer"
+                                    >
+
+                                        <div
+                                            className="flex gap-2 absolute -top-3 right-6 
     bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
-    text-xs font-medium shadow-md text-white 
+    text-xs shadow-md text-white 
     justify-center items-center
     transition-colors duration-300 ease-in-out 
-    group-hover:bg-[#6d72ff]"
-                                    >
-                                            <img src={memberImg} alt="star icon" width="20" height="20" />
-                                            <p className="text-xs">{ride.memberCount} Members</p>
-                                        </div>
-
-
-
-                                        <div className="flex items-center justify-between mb-4 mt-2">
-                                            <span className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-                                                {ride.source}
-                                            </span>
-                                            <span className="text-gray-500 dark:text-gray-400 text-4xl font-semibold">
-                                                ➝
-                                            </span>
-                                            <span className="text-sm w-max ml-2 px-4 py-2 pt-3 rounded-xl justify-center text-center font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-                                                {ride.destination}
-                                            </span>
-                                        </div>
-
-                                        <div className="space-y-2 text-white  text-sm">
-                                            <p>
-                                                <span className="font-semibold text-gray-400">Date:</span> {ride.date}
-                                            </p>
-                                            <p>
-                                                <span className="font-semibold text-gray-400">Price:</span> ₹{ride.price}
-                                            </p>
-                                            <p>
-                                                <span className="font-semibold text-gray-400">Creator:</span>{" "}
-                                                {ride.creator?.name || "Unknown"}
-                                            </p>
-                                        </div>
-
-                                        <button
-                                            onClick={() => handleJoinAwayGlide(ride._id)}
-                                            className="mt-5 w-full px-4 py-2 bg-[#474a8f] text-white rounded-xl font-medium shadow-sm hover:bg-[#6062db] hover:shadow-md transition duration-300 cursor-pointer"
+    group-hover:bg-[#682db1]"
                                         >
-                                            Join Glide
-                                        </button>
+                                            <img src={memberImg} alt="members" width="17" height="17" />
+                                            <p className="text-sm font-poppins">
+                                                {ride.memberCount} {ride.memberCount === 1 ? "Member" : "Members"}
+                                            </p>
 
+                                        </div>
+
+                                        <div className="flex flex-col gap-3 mt-5">
+
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+                                                    {ride.source}
+                                                </span>
+
+                                                <span className="text-gray-400 text-2xl">➝</span>
+
+                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+                                                    {ride.destination}
+                                                </span>
+                                            </div>
+
+                                    <div className="flex  justify-between">
+                                            <p className="text-gray-400 text-md">
+                                                <span className="text-gray-500">Date:</span>
+                                                {" "}
+                                                {new Date(ride.date).toLocaleString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric",
+
+                                                })}
+                                            </p>
+                                            <p className="text-gray-400 text-md">
+                                                <span className="text-gray-500">Departure:</span>{" "}
+                                                {new Date(`1970-01-01T${ride.departureTime}`)
+                                                    .toLocaleTimeString("en-IN", {
+                                                        hour: "2-digit",
+                                                        minute: "2-digit",
+                                                        hour12: true
+                                                    })}
+                                            </p>
+                                            </div>
+
+                                            <span className="text-md text-gray-400">
+                                                <span className="text-gray-400">Glide-owner:</span>{" "}
+                                                {ride.creator?.name || "Unknown"}
+                                            </span>
+
+                                            <span className="text-md text-gray-400">
+                                                <span className="text-gray-400">Fare:</span> ₹{ride.price}
+                                            </span>
+
+
+                                            <button
+                                                onClick={() => handleJoinAwayGlide(ride._id)}
+                                                className="text-white text-md px-5 p-3 rounded-xl cursor-pointer 
+      bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2"
+                                            >
+                                                Join Glide
+                                            </button>
+                                        </div>
                                     </li>
+
                                 ))}
                             </ul>
                         </div>

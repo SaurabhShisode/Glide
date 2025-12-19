@@ -50,12 +50,12 @@ export default function LandingPage() {
     ];
 
     const redirectAfterAuth = (user: any) => {
-  if (!user.emailVerified || !user.phoneVerified) {
-    navigate("/verify")
-  } else {
-    navigate("/home")
-  }
-}
+        if (!user.emailVerified || !user.phoneVerified) {
+            navigate("/verify")
+        } else {
+            navigate("/home")
+        }
+    }
 
     useEffect(() => {
         const timer = setTimeout(() => setShowSplash(false), 2000);
@@ -83,16 +83,25 @@ export default function LandingPage() {
             setLoadingLogin(false)
         }
     }
+    const isVitEmail = (email: string) =>
+        email.toLowerCase().endsWith("@vitbhopal.ac.in")
 
 
     const handleRegister = async (e: React.FormEvent) => {
         e.preventDefault()
+
+        if (!isVitEmail(email)) {
+            toast.error("Please use your VIT Bhopal email (@vitbhopal.ac.in)")
+            return
+        }
+
         setLoadingRegister(true)
         try {
             const res = await axios.post(
                 `${import.meta.env.VITE_BACKEND_URL}/api/auth/register`,
                 { name, email, password }
             )
+
             localStorage.setItem("token", res.data.token)
             localStorage.setItem("glideUser", JSON.stringify(res.data.user))
 
@@ -105,6 +114,7 @@ export default function LandingPage() {
             setLoadingRegister(false)
         }
     }
+
 
 
     const handleGoogleLogin = async () => {

@@ -191,16 +191,16 @@ function generateGitHubHeatmap(days: IDayStats[]) {
                         ))}
                     </div>
 
-                    <h2 className="text-3xl font-grotesk font-bold mb-6">Your Glide Activity</h2>
+                    <h2 className="text-3xl font-grotesk font-bold mb-2">Your Glide Activity</h2>
                     <p className="text-gray-400 mb-6">A visual map of your gliding habits this year</p>
 
-                    <div className="flex gap-[4px] pb-4">
+                    <div className="flex gap-[4px] pb-4 ">
                         {matrix.map((week, w) => (
                             <div key={w} className="flex flex-col gap-[4px]">
                                 {week.map((cell, d) => (
                                     cell.count === null ? (
 
-                                        // Empty placeholder (keeps grid spacing but shows nothing)
+                                        
                                         <div key={d} className="w-4 h-4" />
 
                                     ) : (

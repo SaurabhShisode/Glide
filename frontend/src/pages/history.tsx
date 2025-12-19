@@ -105,7 +105,7 @@ export default function HistoryPage() {
                         Your Glide History
                     </h1>
 
-                    <p className="text-gray-300 font-grotesk text-lg mb-12">
+                    <p className="text-gray-300 font-grotesk text-lg mb-4">
                         View all your taken and posted glides.
                     </p>
 
