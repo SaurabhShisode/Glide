@@ -25,12 +25,12 @@ function App() {
     <BrowserRouter>
       <Routes>
 
-        {/* Public */}
+        
         <Route path="/" element={<LandingPage />} />
         <Route path="/verify" element={<VerifyPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
 
-        {/* Protected */}
+       
         <Route
           path="/home"
           element={
