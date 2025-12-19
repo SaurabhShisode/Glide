@@ -35,14 +35,27 @@ export default function VerifyPage() {
         }
     }, [])
 
+    useEffect(() => {
+        if (!recaptcha) {
+            const verifier = new RecaptchaVerifier(
+                auth,
+                "recaptcha-container",
+                { size: "invisible" }
+            )
+            setRecaptcha(verifier)
+        }
+    }, [])
+
+
     const sendEmailVerification = async () => {
         try {
             setLoading(true)
             await axios.post(
                 `${API_BASE}/auth/send-email-verification`,
-                { userId: user.id },
+                {},
                 { headers: { "x-auth-token": token } }
             )
+
             toast.success("Verification email sent")
         } catch {
             toast.error("Failed to send verification email")
@@ -52,32 +65,29 @@ export default function VerifyPage() {
     }
 
     const sendOtp = async () => {
-        if (!phone.startsWith("+")) {
-            toast.error("Use country code, e.g. +91XXXXXXXXXX")
-            return
-        }
+  if (!phone.startsWith("+")) {
+    toast.error("Use country code, e.g. +91XXXXXXXXXX")
+    return
+  }
 
-        try {
-            setLoading(true)
+  if (!recaptcha) {
+    toast.error("reCAPTCHA not ready")
+    return
+  }
 
-            let verifier = recaptcha
-            if (!verifier) {
-                verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
-                    size: "invisible"
-                })
-                setRecaptcha(verifier)
-            }
+  try {
+    setLoading(true)
+    const result = await signInWithPhoneNumber(auth, phone, recaptcha)
+    setConfirmation(result)
+    toast.success("OTP sent successfully")
+  } catch (err) {
+    console.error("OTP ERROR:", err)
+    toast.error("Failed to send OTP")
+  } finally {
+    setLoading(false)
+  }
+}
 
-            const result = await signInWithPhoneNumber(auth, phone, verifier)
-            setConfirmation(result)
-            toast.success("OTP sent successfully")
-        } catch (err) {
-            console.error(err)
-            toast.error("Failed to send OTP")
-        } finally {
-            setLoading(false)
-        }
-    }
 
     const verifyOtp = async () => {
         if (!confirmation || !otp) return
@@ -137,7 +147,7 @@ export default function VerifyPage() {
                         <button
                             onClick={sendEmailVerification}
                             disabled={loading}
-                            className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+                            className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
                         >
                             Send verification email
                         </button>
@@ -163,7 +173,7 @@ export default function VerifyPage() {
                             <button
                                 onClick={sendOtp}
                                 disabled={loading}
-                                className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+                                className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
                             >
                                 Send OTP
                             </button>
@@ -181,7 +191,7 @@ export default function VerifyPage() {
                             <button
                                 onClick={verifyOtp}
                                 disabled={loading}
-                                className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+                                className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
                             >
                                 Verify OTP
                             </button>
