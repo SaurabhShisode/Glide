@@ -65,21 +65,20 @@ export default function VerifyPage() {
     }
 
     const sendOtp = async () => {
+  if (!phone.startsWith("+")) {
+    toast.error("Use country code like +91XXXXXXXXXX")
+    return
+  }
+
   try {
     setLoading(true)
 
-    const verifier = new RecaptchaVerifier(
-      auth,
-      "recaptcha-container",
-      {
-        size: "invisible",
-        callback: () => {}
-      }
-    )
+    if (!recaptcha) {
+      toast.error("reCAPTCHA not ready")
+      return
+    }
 
-    await verifier.render()  
-
-    const result = await signInWithPhoneNumber(auth, phone, verifier)
+    const result = await signInWithPhoneNumber(auth, phone, recaptcha)
     setConfirmation(result)
     toast.success("OTP sent")
   } catch (err) {
@@ -89,6 +88,8 @@ export default function VerifyPage() {
     setLoading(false)
   }
 }
+
+
 
 
     const verifyOtp = async () => {
