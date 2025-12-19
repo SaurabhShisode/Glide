@@ -45,6 +45,8 @@ export default function HomePage() {
     const [userMenuOpen, setUserMenuOpen] = useState(false);
     const [awayDropdownOpen, setAwayDropdownOpen] = useState(false)
     const [sortOptionAway, setSortOptionAway] = useState<"newest" | "price" | "members">("newest")
+    const [selectedAwayRide, setSelectedAwayRide] = useState<string | null>(null)
+    const [showAwayPopup, setShowAwayPopup] = useState(false)
 
 
     const navigate = useNavigate();
@@ -160,6 +162,7 @@ export default function HomePage() {
                     return;
                 }
                 if (!awaySource || !awayDestination || !awayDate || !awayPrice || !awayTime) {
+                    console.log(awaySource, awayDestination, awayDate, awayPrice, awayTime);
                     toast.error(" required");
                     return;
                 }
@@ -193,42 +196,7 @@ export default function HomePage() {
         }
     };
 
-    const handleJoinAwayGlide = async (rideId: string) => {
-        try {
-            if (!user) {
-                toast.error("You must be logged in to join an away glide");
-                return;
-            }
-
-            setLoadingGlides(true);
-
-            const payload = { userId: user.id };
-
-            const res = await fetch(`${API_BASE}/glide-away/join/${rideId}`, {
-                method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload),
-            });
-
-            const data = await res.json();
-            if (res.ok) {
-                toast.success("Joined away glide successfully");
-
-                setAwayResults((prev) =>
-                    prev.map((ride) =>
-                        ride._id === rideId ? { ...ride, members: [...ride.members, user] } : ride
-                    )
-                );
-            } else {
-                toast.error(data.message || "Failed to join away glide");
-            }
-        } catch (error) {
-            console.error("Error joining away glide:", error);
-            toast.error("Something went wrong");
-        } finally {
-            setLoadingGlides(false);
-        }
-    };
+   
     const getSortedGlides = () => {
         return [...awayResults].sort((a, b) => {
             if (sortOption === "newest") {
@@ -296,6 +264,51 @@ export default function HomePage() {
         }
     };
 
+    const openAwayJoinPopup = (rideId: string) => {
+        if (!user) {
+            toast.error("You must be logged in to join an away glide")
+            return
+        }
+        setSelectedAwayRide(rideId)
+        setShowAwayPopup(true)
+    }
+    const confirmAwayJoin = async () => {
+        try {
+            if (!selectedAwayRide || !user) return
+
+            const res = await fetch(
+                `${API_BASE}/glide-away/join/${selectedAwayRide}`,
+                {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userId: user.id })
+                }
+            )
+
+            const data = await res.json()
+
+            if (res.ok) {
+                toast.success("Joined away glide successfully")
+
+                setAwayResults(prev =>
+                    prev.map(ride =>
+                        ride._id === selectedAwayRide
+                            ? { ...ride, memberCount: ride.memberCount + 1 }
+                            : ride
+                    )
+                )
+
+                navigate("/history")
+            } else {
+                toast.error(data.message || "Failed to join away glide")
+            }
+        } catch {
+            toast.error("Something went wrong")
+        } finally {
+            setShowAwayPopup(false)
+            setSelectedAwayRide(null)
+        }
+    }
 
 
     return (
@@ -1027,26 +1040,26 @@ export default function HomePage() {
                                                 </span>
                                             </div>
 
-                                    <div className="flex  justify-between">
-                                            <p className="text-gray-400 text-md">
-                                                <span className="text-gray-500">Date:</span>
-                                                {" "}
-                                                {new Date(ride.date).toLocaleString("en-IN", {
-                                                    day: "2-digit",
-                                                    month: "short",
-                                                    year: "numeric",
+                                            <div className="flex  justify-between">
+                                                <p className="text-gray-400 text-md">
+                                                    <span className="text-gray-500">Date:</span>
+                                                    {" "}
+                                                    {new Date(ride.date).toLocaleString("en-IN", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric",
 
-                                                })}
-                                            </p>
-                                            <p className="text-gray-400 text-md">
-                                                <span className="text-gray-500">Departure:</span>{" "}
-                                                {new Date(`1970-01-01T${ride.departureTime}`)
-                                                    .toLocaleTimeString("en-IN", {
-                                                        hour: "2-digit",
-                                                        minute: "2-digit",
-                                                        hour12: true
                                                     })}
-                                            </p>
+                                                </p>
+                                                <p className="text-gray-400 text-md">
+                                                    <span className="text-gray-500">Departure:</span>{" "}
+                                                    {new Date(`1970-01-01T${ride.departureTime}`)
+                                                        .toLocaleTimeString("en-IN", {
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                            hour12: true
+                                                        })}
+                                                </p>
                                             </div>
 
                                             <span className="text-md text-gray-400">
@@ -1060,7 +1073,8 @@ export default function HomePage() {
 
 
                                             <button
-                                                onClick={() => handleJoinAwayGlide(ride._id)}
+                                                onClick={() => openAwayJoinPopup(ride._id)}
+
                                                 className="text-white text-md px-5 p-3 rounded-xl cursor-pointer 
       bg-[#682db1] hover:bg-[#943cff] transition duration-300 font-poppins mt-2"
                                             >
@@ -1105,6 +1119,13 @@ export default function HomePage() {
                 onConfirm={() => confirmCampusBooking()}
                 onCancel={() => setShowCampusPopup(false)}
             />
+            <ConfirmPopup
+                open={showAwayPopup}
+                title="Confirm Joining This Glide?"
+                onConfirm={() => confirmAwayJoin()}
+                onCancel={() => setShowAwayPopup(false)}
+            />
+
 
 
         </div >
