@@ -64,7 +64,7 @@ export default function VerifyPage() {
         }
     }
 
-    const sendOtp = async () => {
+const sendOtp = async () => {
   if (!phone.startsWith("+")) {
     toast.error("Use country code like +91XXXXXXXXXX")
     return
@@ -78,16 +78,31 @@ export default function VerifyPage() {
       return
     }
 
+    recaptcha.clear()
+
     const result = await signInWithPhoneNumber(auth, phone, recaptcha)
+
+    if (!result?.verificationId) {
+      toast.error("OTP blocked. Try again later.")
+      return
+    }
+
     setConfirmation(result)
-    toast.success("OTP sent")
-  } catch (err) {
+    toast.success("OTP sent to your phone")
+
+  } catch (err: any) {
     console.error("OTP ERROR:", err)
-    toast.error("Failed to send OTP")
+
+    if (err.code === "auth/too-many-requests") {
+      toast.error("Too many attempts. Try after some time.")
+    } else {
+      toast.error("Failed to send OTP")
+    }
   } finally {
     setLoading(false)
   }
 }
+
 
 
 
