@@ -48,7 +48,7 @@ export default function HomePage() {
     const [selectedAwayRide, setSelectedAwayRide] = useState<string | null>(null)
     const [showAwayPopup, setShowAwayPopup] = useState(false)
     const [awayTotalMembers, setAwayTotalMembers] = useState("")
-const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
+    const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
 
 
     const navigate = useNavigate();
@@ -157,55 +157,55 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                 } else {
                     toast.error(data.message || "Failed to fetch away glides");
                 }
-            }else {
-    if (!user) {
-        toast.error("You must be logged in to create an away glide")
-        return
-    }
+            } else {
+                if (!user) {
+                    toast.error("You must be logged in to create an away glide")
+                    return
+                }
 
-    if (
-        !awaySource ||
-        !awayDestination ||
-        !awayDate ||
-        !awayTime ||
-        !awayPrice ||
-        !awayTotalMembers
-    ) {
-       
-        toast.error("All required fields must be filled")
-        return
-    }
+                if (
+                    !awaySource ||
+                    !awayDestination ||
+                    !awayDate ||
+                    !awayTime ||
+                    !awayPrice ||
+                    !awayTotalMembers
+                ) {
 
-    if (Number(awayTotalMembers) < 1) {
-        toast.error("Total members must be at least 1")
-        return
-    }
+                    toast.error("All required fields must be filled")
+                    return
+                }
 
-    const payload = {
-        source: awaySource,
-        destination: awayDestination,
-        date: awayDate,
-        departureTime: awayTime,
-        price: Number(awayPrice),
-        totalMembers: Number(awayTotalMembers),
-        whatsappGroup: awayWhatsappGroup || null,
-        creator: user.id
-    }
+                if (Number(awayTotalMembers) < 1) {
+                    toast.error("Total members must be at least 1")
+                    return
+                }
 
-    const res = await fetch(`${API_BASE}/glide-away`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-    })
+                const payload = {
+                    source: awaySource,
+                    destination: awayDestination,
+                    date: awayDate,
+                    departureTime: awayTime,
+                    price: Number(awayPrice),
+                    totalMembers: Number(awayTotalMembers),
+                    whatsappGroup: awayWhatsappGroup || null,
+                    creator: user.id
+                }
 
-    const data = await res.json()
+                const res = await fetch(`${API_BASE}/glide-away`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
+                })
 
-    if (res.ok) {
-        toast.success("Away glide created successfully")
-    } else {
-        toast.error(data.message || "Failed to create away glide")
-    }
-}
+                const data = await res.json()
+
+                if (res.ok) {
+                    toast.success("Away glide created successfully")
+                } else {
+                    toast.error(data.message || "Failed to create away glide")
+                }
+            }
 
         } catch (error) {
             console.error("Error handling away glide:", error);
@@ -216,7 +216,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
         }
     };
 
-   
+
     const getSortedGlides = () => {
         return [...awayResults].sort((a, b) => {
             if (sortOption === "newest") {
@@ -352,7 +352,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
 
 
                     <div className="col-span-3">
-                        <ul className="hidden md:flex gap-8 font-grotesk text-[#9290C3] text-lg ">
+                        <ul className="hidden md:flex gap-8 font-dmsans text-[#9290C3] text-lg ">
 
                             <li
                                 className="relative group cursor-pointer transition"
@@ -397,7 +397,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                             className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition"
                         >
                             <img className="rounded-full" src={clipboardImg} width="30px" />
-                            <p className="font-grotesk text-white text-lg">Glide History</p>
+                            <p className="font-dmsans text-white text-lg">Glide History</p>
                         </div>
                         <div className="relative user-menu-area">
                             <div className="relative">
@@ -406,7 +406,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                     className="group flex items-center gap-2 p-2 rounded-4xl cursor-pointer px-4 hover:bg-white/20 transition "
                                 >
                                     <img className="rounded-full" src={userImg} width="30px" />
-                                    <p className="font-grotesk text-white text-lg">
+                                    <p className="font-dmsans text-white text-lg">
                                         Hello, {user?.name ?? "Lion"}
                                     </p>
                                 </div>
@@ -422,14 +422,14 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                         >
                                             <button
                                                 onClick={() => navigate("/profile")}
-                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-dmsans cursor-pointer"
                                             >
                                                 Your Profile
                                             </button>
 
                                             <button
                                                 onClick={() => navigate("/history")}
-                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-grotesk cursor-pointer"
+                                                className="w-full text-left text-gray-300 hover:text-white px-3 py-2 rounded-lg hover:bg-white/10 transition font-dmsans cursor-pointer"
                                             >
                                                 Glide History
                                             </button>
@@ -440,7 +440,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                     localStorage.removeItem("token");
                                                     navigate("/");
                                                 }}
-                                                className="w-full text-left text-red-400 hover:text-red-500 px-3 py-2 rounded-lg hover:bg-red-500/10 transition font-grotesk mt-1 cursor-pointer"
+                                                className="w-full text-left text-red-400 hover:text-red-500 px-3 py-2 rounded-lg hover:bg-red-500/10 transition font-dmsans mt-1 cursor-pointer"
                                             >
                                                 Sign Out
                                             </button>
@@ -462,7 +462,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                 <section className="relative max-w-4xl pt-60 items-center mx-auto rounded-3xl mb-20">
                     {active === "glide-campus" ? (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
-                            <h1 className="text-5xl md:text-6xl font-grotesk text-white leading-tight">
+                            <h1 className="text-5xl md:text-6xl font-manrope text-white leading-tight">
                                 Glide Through Campus
                             </h1>
                             <p className="mt-2 text-lg font-grotesk text-gray-300">
@@ -590,7 +590,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                         </div>
                     ) : (
                         <div className="rounded-2xl p-10 bg-[#080e2a] border-2 border-[#9290C3]">
-                            <h1 className="text-5xl md:text-6xl font-grotesk text-white leading-tight">
+                            <h1 className="text-5xl md:text-6xl font-manrope text-white leading-tight">
                                 Glide Away From Campus
                             </h1>
                             <p className="mt-2 text-lg font-grotesk text-gray-300">
@@ -702,8 +702,8 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                     value={awaySource}
                                                     onChange={(e) => setAwaySource(e.target.value)}
                                                     className="p-4 rounded-xl bg-gray-800 text-white border border-gray-600 transition-all duration-300 focus:outline-none focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff] appearance-none"
-                                                >   
-                                                <option value=" ">Select Source</option>
+                                                >
+                                                    <option value=" ">Select Source</option>
                                                     <option value="Bhopal">Bhopal</option>
                                                     <option value="Indore">Indore</option>
                                                     <option value="VIT Highway">VIT Highway</option>
@@ -780,41 +780,41 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                 />
                                             </div>
                                             <div className="flex gap-5 w-full">
-  <div className="flex flex-col w-1/2">
-    <label className="text-gray-300 font-grotesk mb-2">
-      Total Members
-    </label>
-    <input
-      type="number"
-      min={1}
-      value={awayTotalMembers}
-      onChange={(e) => setAwayTotalMembers(e.target.value)}
-      placeholder="Max members allowed"
-      className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+                                                <div className="flex flex-col w-1/2">
+                                                    <label className="text-gray-300 font-grotesk mb-2">
+                                                        Total Members
+                                                    </label>
+                                                    <input
+                                                        type="number"
+                                                        min={1}
+                                                        value={awayTotalMembers}
+                                                        onChange={(e) => setAwayTotalMembers(e.target.value)}
+                                                        placeholder="Max members allowed"
+                                                        className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
       transition-all duration-300 focus:outline-none 
       focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff]"
-    />
-  </div>
+                                                    />
+                                                </div>
 
-  <div className="flex flex-col w-1/2">
-    <label className="text-gray-300 font-grotesk mb-2">
-      WhatsApp Group Link
-    </label>
-    <input
-      type="url"
-      value={awayWhatsappGroup}
-      onChange={(e) => setAwayWhatsappGroup(e.target.value)}
-      placeholder="Optional"
-      className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
+                                                <div className="flex flex-col w-1/2">
+                                                    <label className="text-gray-300 font-grotesk mb-2">
+                                                        WhatsApp Group Link
+                                                    </label>
+                                                    <input
+                                                        type="url"
+                                                        value={awayWhatsappGroup}
+                                                        onChange={(e) => setAwayWhatsappGroup(e.target.value)}
+                                                        placeholder="Optional"
+                                                        className="w-full p-4 rounded-xl bg-gray-800 text-white border border-gray-600 
       transition-all duration-300 focus:outline-none 
       focus:border-[#6d72ff] focus:ring-1 focus:ring-[#6d72ff]"
-    />
-  </div>
-</div>
+                                                    />
+                                                </div>
+                                            </div>
 
-<p className="text-sm text-gray-400 font-grotesk">
-  Adding a WhatsApp group is recommended so members can coordinate easily.
-</p>
+                                            <p className="text-sm text-gray-400 font-grotesk">
+                                                Adding a WhatsApp group is recommended so members can coordinate easily.
+                                            </p>
 
                                             <button
                                                 type="submit"
@@ -848,14 +848,14 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                     {campusResults.length > 0 ? (
                         <div>
                             <div className="flex items-center space-between mb-6 justify-between ">
-                                <h3 className="text-xl font-semibold text-white font-poppins mb-7 mt-10">
+                                <h3 className="text-xl font-semibold text-white font-dmsans mb-7 mt-10">
                                     Available Campus Glides
                                 </h3>
                                 <div className="relative inline-block text-left mb-6">
                                     <div
                                         onClick={() => setCampusDropdownOpen(!campusDropdownOpen)}
                                         className="cursor-pointer px-4 py-3 bg-gray-800 border border-gray-600 
-                   rounded-xl text-white font-poppins flex items-center justify-between gap-4
+                   rounded-xl text-white font-dmsans flex items-center justify-between gap-4
                    hover:bg-gray-700 transition"
                                     >
                                         <span>
@@ -881,7 +881,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                         setCampusSortOption("newest")
                                                         setCampusDropdownOpen(false)
                                                     }}
-                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-poppins rounded-t-xl"
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-dmsans rounded-t-xl"
                                                 >
                                                     Newest First
                                                 </div>
@@ -891,7 +891,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                         setCampusSortOption("price")
                                                         setCampusDropdownOpen(false)
                                                     }}
-                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-poppins rounded-b-xl"
+                                                    className="px-4 py-3 cursor-pointer hover:bg-[#2a3350] text-white font-dmsans rounded-b-xl"
                                                 >
                                                     Price Low to High
                                                 </div>
@@ -906,7 +906,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                 {sortedCampusResults.map((ride, idx) => (
                                     <li
                                         key={idx}
-                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins cursor-pointer"
+                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-dmsans cursor-pointer"
                                     >
 
                                         {ride.creator?.tags?.length > 0 && (
@@ -918,8 +918,8 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
       transition-colors duration-300 ease-in-out 
       group-hover:bg-[#682db1] "
                                             >
-                                                <img src={starIcon} alt="star icon" width="17" height="17" />
-                                                <p className="text-sm font-poppins">{ride.creator.tags[0]}</p>
+                                                <img src={starIcon} alt="star icon" width="15" height="15" />
+                                                <p className="text-sm font-ibm">{ride.creator.tags[0]}</p>
                                             </div>
                                         )}
 
@@ -933,7 +933,7 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
                                                 {ride.source}
                                             </span>
 
-                                            <p className="text-gray-400 text-md ">
+                                            <p className="text-gray-400 text-md mt-2 ">
                                                 {new Date(ride.createdAt).toLocaleString("en-IN", {
                                                     day: "2-digit",
                                                     month: "short",
@@ -1063,85 +1063,84 @@ const [awayWhatsappGroup, setAwayWhatsappGroup] = useState("")
 
                             <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
                                 {sortedAwayResults.map((ride, idx) => (
-  <li
-    key={idx}
-    className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins"
-  >
-    <div
-      className="flex gap-2 absolute -top-3 right-6 
+                                    <li
+                                        key={idx}
+                                        className="relative p-4 group bg-[#111827] border border-gray-700 rounded-2xl shadow-md hover:shadow-xl hover:scale-103 transition duration-300 transform font-poppins"
+                                    >
+                                        <div
+                                            className="flex gap-2 absolute -top-3 right-6 
       bg-[#1f2937] border border-gray-700 px-3 py-1 rounded-xl 
       text-xs shadow-md text-white 
       justify-center items-center
       transition-colors duration-300 ease-in-out 
       group-hover:bg-[#682db1]"
-    >
-      <img src={memberImg} alt="members" width="17" height="17" />
-      <p className="text-sm font-poppins">
-        {ride.currentMembers} / {ride.totalMembers} Members
-      </p>
-    </div>
+                                        >
+                                            <img src={memberImg} alt="members" width="17" height="17" />
+                                            <p className="text-sm font-poppins">
+                                                {ride.currentMembers} / {ride.totalMembers} Members
+                                            </p>
+                                        </div>
 
-    <div className="flex flex-col gap-3 mt-5">
+                                        <div className="flex flex-col gap-3 mt-5">
 
-      <div className="flex items-center justify-between">
-        <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-          {ride.source}
-        </span>
+                                            <div className="flex items-center justify-between">
+                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+                                                    {ride.source}
+                                                </span>
 
-        <span className="text-gray-400 text-2xl">➝</span>
+                                                <span className="text-gray-400 text-2xl">➝</span>
 
-        <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
-          {ride.destination}
-        </span>
-      </div>
+                                                <span className="text-md w-max px-3 py-2 rounded-lg bg-indigo-500/20 text-indigo-300 border border-indigo-400/30 tracking-wide">
+                                                    {ride.destination}
+                                                </span>
+                                            </div>
 
-      <div className="flex justify-between">
-        <p className="text-gray-400 text-md">
-          <span className="text-gray-500">Date:</span>{" "}
-          {new Date(ride.date).toLocaleDateString("en-IN", {
-            day: "2-digit",
-            month: "short",
-            year: "numeric"
-          })}
-        </p>
+                                            <div className="flex justify-between">
+                                                <p className="text-gray-400 text-md">
+                                                    <span className="text-gray-500">Date:</span>{" "}
+                                                    {new Date(ride.date).toLocaleDateString("en-IN", {
+                                                        day: "2-digit",
+                                                        month: "short",
+                                                        year: "numeric"
+                                                    })}
+                                                </p>
 
-        <p className="text-gray-400 text-md">
-          <span className="text-gray-500">Departure:</span>{" "}
-          {new Date(`1970-01-01T${ride.departureTime}`).toLocaleTimeString(
-            "en-IN",
-            {
-              hour: "2-digit",
-              minute: "2-digit",
-              hour12: true
-            }
-          )}
-        </p>
-      </div>
+                                                <p className="text-gray-400 text-md">
+                                                    <span className="text-gray-500">Departure:</span>{" "}
+                                                    {new Date(`1970-01-01T${ride.departureTime}`).toLocaleTimeString(
+                                                        "en-IN",
+                                                        {
+                                                            hour: "2-digit",
+                                                            minute: "2-digit",
+                                                            hour12: true
+                                                        }
+                                                    )}
+                                                </p>
+                                            </div>
 
-      <span className="text-md text-gray-400">
-        <span className="text-gray-400">Glide-owner:</span>{" "}
-        {ride.creator?.name || "Unknown"}
-      </span>
+                                            <span className="text-md text-gray-400">
+                                                <span className="text-gray-400">Glide-owner:</span>{" "}
+                                                {ride.creator?.name || "Unknown"}
+                                            </span>
 
-      <span className="text-md text-gray-400">
-        <span className="text-gray-400">Fare:</span> ₹{ride.price}
-      </span>
+                                            <span className="text-md text-gray-400">
+                                                <span className="text-gray-400">Fare:</span> ₹{ride.price}
+                                            </span>
 
-      <button
-        disabled={ride.availableSeats === 0}
-        onClick={() => openAwayJoinPopup(ride._id)}
-        className={`text-white text-md px-5 p-3 rounded-xl font-poppins mt-2 transition duration-300
-          ${
-            ride.availableSeats === 0
-              ? "bg-gray-600 cursor-not-allowed"
-              : "bg-[#682db1] hover:bg-[#943cff] cursor-pointer"
-          }`}
-      >
-        {ride.availableSeats === 0 ? "Glide Full" : "Join Glide"}
-      </button>
-    </div>
-  </li>
-))}
+                                            <button
+                                                disabled={ride.availableSeats === 0}
+                                                onClick={() => openAwayJoinPopup(ride._id)}
+                                                className={`text-white text-md px-5 p-3 rounded-xl font-poppins mt-2 transition duration-300
+          ${ride.availableSeats === 0
+                                                        ? "bg-gray-600 cursor-not-allowed"
+                                                        : "bg-[#682db1] hover:bg-[#943cff] cursor-pointer"
+                                                    }`}
+                                            >
+                                                {ride.availableSeats === 0 ? "Glide Full" : "Join Glide"}
+                                            </button>
+                                        </div>
+                                    </li>
+                                ))}
 
                             </ul>
                         </div>

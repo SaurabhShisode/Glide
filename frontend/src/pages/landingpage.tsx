@@ -204,7 +204,7 @@ export default function LandingPage() {
                                     className="text-4xl md:text-7xl font-oswald text-white leading-tight mt-2"
                                     text="commute smarter."
                                 />
-                                <p className="mt-6 text-md md:text-xl font-grotesk text-gray-300">
+                                <p className="mt-6 text-md md:text-xl font-dmsans text-gray-300">
                                     From hostel to academic block or to the Bhopal station - Glide
                                     connects students for faster, cheaper, and eco-friendly rides.
                                 </p>
@@ -373,7 +373,7 @@ export default function LandingPage() {
                 </div>
                 <section className="bg-black text-white p-10 mt-10 flex flex-col md:flex-row gap-4 md:gap-10 items-center mx-10 md:mx-20 md:mr-140">
                     <div className="flex-1">
-                        <h1 className="text-3xl md:text-5xl font-grotesk text-right">
+                        <h1 className="text-3xl md:text-5xl font-manrope text-right">
                             Glide-Campus
                         </h1>
                     </div>
@@ -411,7 +411,7 @@ export default function LandingPage() {
                     </div>
 
                     <div className="flex-1 ">
-                        <h1 className="text-3xl md:text-5xl font-grotesk ">Glide-Away</h1>
+                        <h1 className="text-3xl md:text-5xl font-manrope ">Glide-Away</h1>
                     </div>
                 </section>
 
