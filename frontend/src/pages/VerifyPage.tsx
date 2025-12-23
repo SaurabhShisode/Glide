@@ -93,38 +93,42 @@ export default function VerifyPage() {
     setLoading(true)
 
     const configuration = {
-      widgetId: import.meta.env.VITE_MSG91_WIDGET_ID,
-      tokenAuth: import.meta.env.VITE_MSG91_TOKEN_AUTH,
-      identifier: phone,
-      exposeMethods: true,
+  widgetId: import.meta.env.VITE_MSG91_WIDGET_ID,
+  tokenAuth: import.meta.env.VITE_MSG91_TOKEN_AUTH,
+  identifier: phone,
+  exposeMethods: true,
 
-      success: async () => {
-        try {
-          await axios.post(
-            `${API_BASE}/auth/verify-phone`,
-            { phone },
-            { headers: { "x-auth-token": token } }
-          )
+  authMode: "inline",
+  containerId: "msg91-otp-container",
 
-          localStorage.setItem(
-            "glideUser",
-            JSON.stringify({ ...user, phoneVerified: true })
-          )
+  success: async () => {
+    try {
+      await axios.post(
+        `${API_BASE}/auth/verify-phone`,
+        { phone },
+        { headers: { "x-auth-token": token } }
+      )
 
-          toast.success("Phone verified successfully")
-          navigate("/home")
-        } catch {
-          toast.error("Phone verification failed")
-        } finally {
-          setLoading(false)
-        }
-      },
+      localStorage.setItem(
+        "glideUser",
+        JSON.stringify({ ...user, phoneVerified: true })
+      )
 
-      failure: () => {
-        toast.error("OTP verification failed")
-        setLoading(false)
-      }
+      toast.success("Phone verified successfully")
+      navigate("/home")
+    } catch {
+      toast.error("Phone verification failed")
+    } finally {
+      setLoading(false)
     }
+  },
+
+  failure: () => {
+    toast.error("OTP verification failed")
+    setLoading(false)
+  }
+}
+
 
     window.initSendOTP(configuration)
   }
@@ -188,6 +192,11 @@ export default function VerifyPage() {
               >
                 Verify phone number
               </button>
+              <div
+  id="msg91-otp-container"
+  className="mt-4"
+></div>
+
             </>
           )}
         </div>
