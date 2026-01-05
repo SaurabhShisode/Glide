@@ -17,16 +17,32 @@ interface IUser {
 
 export default function VerifyPage() {
   const navigate = useNavigate()
-  const user = JSON.parse(localStorage.getItem("glideUser") || "{}") as IUser
   const token = localStorage.getItem("token")
 
+  const [user, setUser] = useState<IUser | null>(null)
   const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    if (user.emailVerified) {
-      navigate("/home")
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(
+          `${API_BASE}/auth/me`,
+          { headers: { "x-auth-token": token } }
+        )
+
+        setUser(res.data)
+        localStorage.setItem("glideUser", JSON.stringify(res.data))
+
+        if (res.data.emailVerified && res.data.phone) {
+          navigate("/home")
+        }
+      } catch {
+        toast.error("Failed to fetch verification status")
+      }
     }
+
+    fetchUser()
   }, [])
 
   const sendEmailVerification = async () => {
@@ -59,18 +75,20 @@ export default function VerifyPage() {
         { headers: { "x-auth-token": token } }
       )
 
-      localStorage.setItem(
-        "glideUser",
-        JSON.stringify({ ...user, phone })
-      )
+      const updatedUser = { ...user!, phone }
+      setUser(updatedUser)
+      localStorage.setItem("glideUser", JSON.stringify(updatedUser))
 
       toast.success("Phone number saved")
+      navigate("/home")
     } catch {
       toast.error("Failed to save phone number")
     } finally {
       setLoading(false)
     }
   }
+
+  if (!user) return null
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#090014] via-[#120027] to-[#1a003d] flex items-center justify-center px-4">
@@ -101,7 +119,7 @@ export default function VerifyPage() {
             <button
               onClick={sendEmailVerification}
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+              className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
             >
               Send verification email
             </button>
@@ -121,7 +139,7 @@ export default function VerifyPage() {
           <button
             onClick={savePhone}
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+            className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
           >
             Save phone number
           </button>
