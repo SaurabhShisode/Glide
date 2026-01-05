@@ -22,9 +22,6 @@ export default function VerifyEmailPage() {
     axios
       .get(`${API_BASE}/auth/verify-email?token=${token}`)
       .then(() => {
-        const user = JSON.parse(localStorage.getItem("glideUser") || "{}")
-        user.emailVerified = true
-        localStorage.setItem("glideUser", JSON.stringify(user))
         setStatus("success")
         setTimeout(() => navigate("/verify"), 2000)
       })
@@ -41,8 +38,6 @@ export default function VerifyEmailPage() {
         transition={{ duration: 0.4 }}
         className="relative w-full max-w-md rounded-2xl bg-[#0b061a]/80 backdrop-blur-2xl border border-[#ffffff1a] shadow-[0_0_80px_#7c3aed40] p-8 text-center"
       >
-        <div className="absolute inset-0 rounded-2xl pointer-events-none bg-gradient-to-br from-purple-500/10 to-indigo-500/10" />
-
         {status === "loading" && (
           <>
             <div className="w-10 h-10 mx-auto mb-4 border-2 border-purple-400 border-t-transparent rounded-full animate-spin" />
@@ -64,7 +59,7 @@ export default function VerifyEmailPage() {
               Email verified successfully
             </h2>
             <p className="text-gray-400 text-sm">
-              Redirecting you to complete verification
+              Redirecting you to complete setup
             </p>
           </>
         )}
