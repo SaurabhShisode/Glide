@@ -12,6 +12,7 @@ interface IUser {
   name: string
   email: string
   emailVerified: boolean
+  phone?: string
 }
 
 export default function VerifyPage() {
@@ -19,6 +20,7 @@ export default function VerifyPage() {
   const user = JSON.parse(localStorage.getItem("glideUser") || "{}") as IUser
   const token = localStorage.getItem("token")
 
+  const [phone, setPhone] = useState("")
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
@@ -43,6 +45,33 @@ export default function VerifyPage() {
     }
   }
 
+  const savePhone = async () => {
+    if (!phone) {
+      toast.error("Enter phone number")
+      return
+    }
+
+    try {
+      setLoading(true)
+      await axios.post(
+        `${API_BASE}/auth/save-phone`,
+        { phone },
+        { headers: { "x-auth-token": token } }
+      )
+
+      localStorage.setItem(
+        "glideUser",
+        JSON.stringify({ ...user, phone })
+      )
+
+      toast.success("Phone number saved")
+    } catch {
+      toast.error("Failed to save phone number")
+    } finally {
+      setLoading(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#090014] via-[#120027] to-[#1a003d] flex items-center justify-center px-4">
       <motion.div
@@ -55,7 +84,7 @@ export default function VerifyPage() {
           Secure your Glide account
         </h1>
         <p className="text-gray-400 mb-8 text-sm">
-          Verify your email to unlock rides
+          Verify your email and add your phone number
         </p>
 
         <div className="mb-8">
@@ -72,15 +101,34 @@ export default function VerifyPage() {
             <button
               onClick={sendEmailVerification}
               disabled={loading}
-              className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition cursor-pointer"
+              className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
             >
               Send verification email
             </button>
           )}
         </div>
 
+        <div className="mb-6">
+          <h3 className="text-white font-semibold mb-2">Phone number</h3>
+
+          <input
+            className="w-full mb-3 px-4 py-3 rounded-xl bg-[#140b2e] border border-[#ffffff1a] text-white outline-none"
+            placeholder="+91XXXXXXXXXX"
+            value={phone}
+            onChange={e => setPhone(e.target.value)}
+          />
+
+          <button
+            onClick={savePhone}
+            disabled={loading}
+            className="w-full py-3 rounded-xl bg-[#6f12f0] text-white font-semibold hover:bg-[#5e14c6] transition"
+          >
+            Save phone number
+          </button>
+        </div>
+
         <p className="text-xs text-gray-500 text-center mt-6">
-          Glide uses secure email verification
+          Glide stores your phone number for contact purposes only
         </p>
       </motion.div>
     </div>
